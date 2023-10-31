@@ -30,7 +30,7 @@ class CustomText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toString(),
-      textAlign: textAlign ?? TextAlign.end,
+      textAlign: textAlign ?? TextAlign.start,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
           height: height ?? 1.4,

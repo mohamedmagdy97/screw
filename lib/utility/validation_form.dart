@@ -4,6 +4,7 @@ enum TextFieldValidatorType {
   name,
   displayText,
   optional,
+  Number,
 }
 
 validation(
@@ -19,6 +20,16 @@ validation(
     // if (value.length < 2) {
     //   return GlobalWords.short_text.tr;
     // }
+  } else if (type == TextFieldValidatorType.Number) {
+    if (value.isEmpty) {
+      return "هذا الحقل مطلوب";
+    }
+
+    if (!regExpNumber.hasMatch(value.trim().replaceAll('‎', '')) ||
+        value.trim().contains(".") ||
+        value.trim().contains(",")) {
+      return "لا يجب ان يحتوي علي حروف خاصة";
+    }
   } else if (type == TextFieldValidatorType.name) {
     if (value.isEmpty) {
       return "هذا الحقل مطلوب";
