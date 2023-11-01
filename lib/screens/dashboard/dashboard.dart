@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/components/custom_text.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/screens/dashboard/dashboard_data.dart';
@@ -19,6 +20,19 @@ class _DashboardState extends State<Dashboard> {
   DashboardData dashboardData = DashboardData();
 
   @override
+  void initState() {
+     homeData.loadAd();
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    homeData.loadAd();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => homeData.onWillPop(context),
@@ -33,7 +47,7 @@ class _DashboardState extends State<Dashboard> {
           ),
           actions: [
             IconButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pop(context, true),
               icon: Transform.flip(
                 flipX: true,
                 child: const Icon(Icons.arrow_back_ios, color: AppColors.white),
@@ -42,6 +56,14 @@ class _DashboardState extends State<Dashboard> {
           ],
           title: CustomText(text: "النتائج", fontSize: 22.sp),
         ),
+        bottomNavigationBar: homeData.bannerAd != null
+            ? Container(
+          color: AppColors.grayy,
+          width: homeData.bannerAd!.size.width.toDouble(),
+          height: homeData.bannerAd!.size.height.toDouble(),
+          child: AdWidget(ad: homeData.bannerAd!),
+        )
+            : null,
         backgroundColor: AppColors.bg,
         body: Directionality(
           textDirection: TextDirection.rtl,

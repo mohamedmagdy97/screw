@@ -1,4 +1,8 @@
+import 'dart:io';
+
+// import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
 import 'package:screw_calc/models/item.dart';
 import 'package:screw_calc/models/player_model.dart';
@@ -20,7 +24,7 @@ class HomeData {
 
   List<PlayerModel> players = [];
 
-  init() {
+  init() async {
     List.generate(
         5,
         (index) => listCubit.state.data!.add(
@@ -28,6 +32,8 @@ class HomeData {
 
     listCubit.state.data!.first.isActive = true;
     listCubit.update(data: listCubit.state.data!);
+
+    loadAd();
   }
 
   onSelect(index) {
@@ -81,5 +87,58 @@ class HomeData {
       return Future.value(false);
     }
     return Future.value(true);
+  }
+
+  BannerAd? bannerAd;
+  GenericCubit<bool> isLoadedCubit = GenericCubit(data: false);
+
+  final adUnitId = Platform.isAndroid
+      ? 'ca-app-pub-2846618561973841/6485504999'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
+  void loadAd() {
+    bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        // Called when an ad is successfully received.
+        onAdLoaded: (ad) {
+          debugPrint('$ad loaded.');
+
+          isLoadedCubit.update(data: true);
+        },
+        // Called when an ad request failed.
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('BannerAd failed to load: $err');
+          // Dispose the ad here to free resources.
+          ad.dispose();
+        },
+        // Called when an ad opens an overlay that covers the screen.
+        onAdOpened: (Ad ad) {},
+        // Called when an ad removes an overlay that covers the screen.
+        onAdClosed: (Ad ad) {},
+        // Called when an impression occurs on the ad.
+        onAdImpression: (Ad ad) {},
+      ),
+    )..load();
+  }
+
+  void showSnackBar(String content, context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(content),
+        duration: const Duration(milliseconds: 1500),
+      ),
+    );
+  }
+
+  String? getBannerAdUnitId() {
+    if (Platform.isIOS) {
+      return 'ca-app-pub-3940256099942544/2934735716';
+    } else if (Platform.isAndroid) {
+      return 'ca-app-pub-2846618561973841/6485504999';
+    }
+    return null;
   }
 }

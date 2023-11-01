@@ -1,7 +1,11 @@
+// import 'package:admob_flutter/admob_flutter.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/components/custom_button.dart';
 import 'package:screw_calc/components/custom_text.dart';
 import 'package:screw_calc/components/text_filed_custom.dart';
@@ -26,6 +30,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    homeData.loadAd();
+  }
+
+  // final AdSize adSize = const AdSize(width: 300, height: 50);
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => homeData.onWillPop(context),
@@ -36,13 +48,14 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: AppColors.grayy,
             title: CustomText(text: "سكرو", fontSize: 22.sp),
           ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: CustomButton(
-              text: "التالي",
-              onPressed: () => homeData.goToNext(context),
-            ),
-          ),
+          bottomNavigationBar: homeData.bannerAd != null
+              ? Container(
+                  color: AppColors.grayy,
+                  width: homeData.bannerAd!.size.width.toDouble(),
+                  height: homeData.bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: homeData.bannerAd!),
+                )
+              : null,
           backgroundColor: AppColors.bg,
           body: Form(
             key: homeData.formKey,
@@ -161,6 +174,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             textFieldVaidType:
                                 TextFieldValidatorType.displayText,
                           ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 16),
+                          child: CustomButton(
+                            text: "التالي",
+                            onPressed: () => homeData.goToNext(context),
+                          ),
+                        ),
                       ],
                     );
                   },
