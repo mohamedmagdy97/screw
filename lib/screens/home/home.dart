@@ -47,7 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
             automaticallyImplyLeading: false,
             backgroundColor: AppColors.grayy,
             title: CustomText(text: "سكرو", fontSize: 22.sp),
+            leading: InkWell(onTap: () {}, child: const Icon(Icons.menu)),
           ),
+          // drawer: Column(
+          //   children: [Text('data')],
+          // ),
           bottomNavigationBar: homeData.bannerAd != null
               ? Container(
                   color: AppColors.grayy,

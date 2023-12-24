@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "847715423581",
+    "project_id": "screw-e662c",
+    "storage_bucket": "screw-e662c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847715423581:android:816df70edc55481db784b4",
+        "android_client_info": {
+          "package_name": "com.megTech.screw_calc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKU4Q9H286Mv-xEz5tYvVqvfvWTh9_DlI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      },
+      "admob_app_id": "ca-app-pub-2846618561973841~4716255614"
+    }
+  ],
+  "configuration_version": "1"
+}

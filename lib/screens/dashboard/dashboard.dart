@@ -21,7 +21,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-     homeData.loadAd();
+    homeData.loadAd();
     super.initState();
   }
 
@@ -31,9 +31,15 @@ class _DashboardState extends State<Dashboard> {
     homeData.loadAd();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    // widget.players.sort((a, b) => a.total!.compareTo(b.total!));
+
+    int resWinner = int.parse(widget.players
+        .reduce((curr, next) =>
+            int.parse(curr.total!) < int.parse(next.total!) ? (curr) : (next))
+        .total
+        .toString());
     return WillPopScope(
       onWillPop: () => homeData.onWillPop(context),
       child: Scaffold(
@@ -58,11 +64,11 @@ class _DashboardState extends State<Dashboard> {
         ),
         bottomNavigationBar: homeData.bannerAd != null
             ? Container(
-          color: AppColors.grayy,
-          width: homeData.bannerAd!.size.width.toDouble(),
-          height: homeData.bannerAd!.size.height.toDouble(),
-          child: AdWidget(ad: homeData.bannerAd!),
-        )
+                color: AppColors.grayy,
+                width: homeData.bannerAd!.size.width.toDouble(),
+                height: homeData.bannerAd!.size.height.toDouble(),
+                child: AdWidget(ad: homeData.bannerAd!),
+              )
             : null,
         backgroundColor: AppColors.bg,
         body: Directionality(
@@ -79,6 +85,10 @@ class _DashboardState extends State<Dashboard> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8),
                     decoration: BoxDecoration(
+                        color:
+                            resWinner.toString() == widget.players[index].total
+                                ? AppColors.mainColorLight
+                                : null,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: AppColors.grayy)),
                     child: Column(

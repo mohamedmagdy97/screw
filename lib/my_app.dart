@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) => Directionality(
         textDirection: TextDirection.rtl,
         child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'سكرو',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
