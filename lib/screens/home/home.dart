@@ -42,16 +42,73 @@ class _MyHomePageState extends State<MyHomePage> {
     return WillPopScope(
       onWillPop: () => homeData.onWillPop(context),
       child: Scaffold(
+          key: homeData.scaffoldKey,
           appBar: AppBar(
-            centerTitle: true,
-            automaticallyImplyLeading: false,
-            backgroundColor: AppColors.grayy,
-            title: CustomText(text: "سكرو", fontSize: 22.sp),
-            leading: InkWell(onTap: () {}, child: const Icon(Icons.menu)),
+              centerTitle: true,
+              automaticallyImplyLeading: false,
+              backgroundColor: AppColors.grayy,
+              title: CustomText(text: "سكرو", fontSize: 22.sp),
+              actions: [
+                InkWell(
+                  onTap: () =>
+                      homeData.scaffoldKey.currentState!.openEndDrawer(),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.menu, color: Colors.white),
+                  ),
+                ),
+              ]),
+          endDrawer: Padding(
+            padding: EdgeInsets.only(top: 56.h, bottom: 50.h),
+            child: const SafeArea(
+              child: Drawer(
+                backgroundColor: AppColors.opacity_1,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.only(top: 32.0),
+                          child: Icon(Icons.gavel_sharp,
+                              size: 50, color: Colors.white)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32.0),
+                        child:
+                            CustomText(text: "آهلا بيك يا صديقي", fontSize: 16),
+                      ),
+                      Divider(endIndent: 10, indent: 10),
+                      ListTile(
+                        title: CustomText(
+                          text: "قوانين اللعبه",
+                          fontSize: 16,
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                      ListTile(
+                        title: CustomText(
+                          text: "حول التطبيق",
+                          fontSize: 16,
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                      ListTile(
+                        title: CustomText(
+                          text: "لمعرفه اماكن شراء اللعبه",
+                          fontSize: 16,
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                      Spacer(),
+                      CustomText(
+                        text: "version 1.0.0",
+                        fontSize: 16,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
-          // drawer: Column(
-          //   children: [Text('data')],
-          // ),
           bottomNavigationBar: homeData.bannerAd != null
               ? Container(
                   color: AppColors.grayy,

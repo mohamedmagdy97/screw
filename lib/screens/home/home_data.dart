@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 // import 'package:admob_flutter/admob_flutter.dart';
@@ -95,6 +96,7 @@ class HomeData {
   final adUnitId = Platform.isAndroid
       ? 'ca-app-pub-2846618561973841/6485504999'
       : 'ca-app-pub-3940256099942544/2934735716';
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   void loadAd() {
     bannerAd = BannerAd(
@@ -104,7 +106,7 @@ class HomeData {
       listener: BannerAdListener(
         // Called when an ad is successfully received.
         onAdLoaded: (ad) {
-          debugPrint('$ad loaded.');
+          log('?>>>>>DFFDDFDF==${ad.responseInfo!.loadedAdapterResponseInfo!.description} loaded.');
 
           isLoadedCubit.update(data: true);
         },
@@ -115,11 +117,17 @@ class HomeData {
           ad.dispose();
         },
         // Called when an ad opens an overlay that covers the screen.
-        onAdOpened: (Ad ad) {},
+        onAdOpened: (Ad ad) {
+          log('?>>>>>DFFDDFDF onAdOpened ==${ad.responseInfo!.loadedAdapterResponseInfo!.description} onAdOpened.');
+        },
         // Called when an ad removes an overlay that covers the screen.
-        onAdClosed: (Ad ad) {},
+        onAdClosed: (Ad ad) {
+          log('?>>>>>DFFDDFDF onAdClosed ==${ad.responseInfo!.loadedAdapterResponseInfo!.description} onAdClosed.');
+        },
         // Called when an impression occurs on the ad.
-        onAdImpression: (Ad ad) {},
+        onAdImpression: (Ad ad) {
+          log('?>>>>>DFFDDFDF onAdImpression ==${ad.responseInfo!.loadedAdapterResponseInfo!.description} onAdImpression.');
+        },
       ),
     )..load();
   }

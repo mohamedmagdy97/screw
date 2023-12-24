@@ -32,7 +32,7 @@ class AppColors {
   static const Color greyB0B0B0 = Color(0xffB0B0B0);
   static const Color greyBFBDBD = Color(0xffBFBDBD);
   static const Color orangeF8A500 = Color(0xffF8A500);
-  static const Color opacity_1 = Color(0xffad9cb8);
+  static const Color opacity_1 = Color(0xff341a41);
   static const Color cardColor = Color(0xffdeeaff);
   static const Color cardColor3 = Color(0xff4C2563);
   static const Color cardColor4 = Color(0xff8a9d2a);
