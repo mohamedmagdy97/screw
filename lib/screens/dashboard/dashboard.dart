@@ -87,7 +87,7 @@ class _DashboardState extends State<Dashboard> {
                     decoration: BoxDecoration(
                         color:
                             resWinner.toString() == widget.players[index].total
-                                ? AppColors.mainColorLight
+                                ? AppColors.mainColor
                                 : null,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: AppColors.grayy)),
