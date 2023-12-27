@@ -77,6 +77,17 @@ class HomeData {
     }
   }
 
+  clearValues() {
+    players.forEach((element) {
+      element.gw1 = "";
+      element.gw2 = "";
+      element.gw3 = "";
+      element.gw4 = "";
+      element.gw5 = "";
+      element.total = "0";
+    });
+  }
+
   DateTime? currentBackPressTime;
 
   Future<bool> onWillPop(context) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:screw_calc/components/custom_button.dart';
 import 'package:screw_calc/components/custom_text.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/screens/dashboard/dashboard_data.dart';
@@ -48,7 +49,56 @@ class _DashboardState extends State<Dashboard> {
           automaticallyImplyLeading: false,
           backgroundColor: AppColors.grayy,
           leading: IconButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => Dialog(
+                        backgroundColor: AppColors.bg,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 32),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CustomText(
+                                text: "تحذير",
+                                fontSize: 18.sp,
+                                color: AppColors.mainColor,
+                              ),
+                              const SizedBox(height: 40),
+                              CustomText(
+                                text: "هل تريد اعادة بدأ الجولة",
+                                fontSize: 18.sp,
+                              ),
+                              const SizedBox(height: 40),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  CustomButton(
+                                    width: 0.25.sw,
+                                    height: 40,
+                                    text: "رجوع",
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                  CustomButton(
+                                    width: 0.25.sw,
+                                    height: 40,
+                                    text: "نعم",
+                                    isButtonBorder: true,
+                                    onPressed: () {
+                                      homeData.clearValues();
+                                      setState(() {});
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ));
+            },
             icon: const Icon(Icons.refresh, color: AppColors.white),
           ),
           actions: [

@@ -34,6 +34,17 @@ class _RulesScreenState extends State<RulesScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.grayy,
         title: CustomText(text: "قوانين اللعبه", fontSize: 22.sp),
+        actions: [
+          IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Transform.flip(
+                flipX: true,
+                child: const Icon(
+                  Icons.arrow_back_ios_sharp,
+                  color: AppColors.white,
+                ),
+              ))
+        ],
       ),
       backgroundColor: AppColors.bg,
       bottomNavigationBar: homeData.bannerAd != null
