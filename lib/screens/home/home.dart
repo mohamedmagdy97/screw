@@ -1,8 +1,4 @@
-// import 'package:admob_flutter/admob_flutter.dart';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -12,7 +8,7 @@ import 'package:screw_calc/components/text_filed_custom.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
 import 'package:screw_calc/models/item.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
-import 'package:screw_calc/screens/rules_screen.dart';
+import 'package:screw_calc/screens/home/widgets/drawer_widget.dart';
 import 'package:screw_calc/utility/app_theme.dart';
 import 'package:screw_calc/utility/validation_form.dart';
 
@@ -59,66 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ]),
-          endDrawer: Padding(
-            padding: EdgeInsets.only(top: 60.h, bottom: 54.h),
-            child: SafeArea(
-              child: Drawer(
-                backgroundColor: AppColors.opacity_1,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 32.0),
-                        child: Image.asset("assets/icons/icon.png",
-                            height: 0.15.sh),
-
-                        // Icon(Icons.gavel_sharp,
-                        //     size: 50, color: Colors.white),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32.0),
-                        child:
-                            CustomText(text: "آهلا بيك يا صديقي", fontSize: 16),
-                      ),
-                      const Divider(endIndent: 10, indent: 10),
-                      ListTile(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const RulesScreen()),
-                        ),
-                        title: const CustomText(
-                          text: "قوانين اللعبه",
-                          fontSize: 16,
-                          textAlign: TextAlign.end,
-                        ),
-                      ),
-                      const ListTile(
-                        title: CustomText(
-                          text: "حول التطبيق",
-                          fontSize: 16,
-                          textAlign: TextAlign.end,
-                        ),
-                      ),
-                      // ListTile(
-                      //   title: CustomText(
-                      //     text: "لمعرفه اماكن شراء اللعبه",
-                      //     fontSize: 16,
-                      //     textAlign: TextAlign.end,
-                      //   ),
-                      // ),
-                      const Spacer(),
-                      const CustomText(
-                        text: "version 1.0.0",
-                        fontSize: 16,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          endDrawer: const DrawerWidget(),
           bottomNavigationBar: homeData.bannerAd != null
               ? Container(
                   color: AppColors.grayy,
