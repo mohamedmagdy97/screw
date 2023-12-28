@@ -11,7 +11,7 @@ class CustomText extends StatelessWidget {
   final int? maxLines;
   final double? height;
   final TextAlign? textAlign;
-  final bool? lineThrough;
+  final bool? underline;
 
   const CustomText({
     Key? key,
@@ -22,7 +22,7 @@ class CustomText extends StatelessWidget {
     this.fontFamily,
     this.textAlign,
     this.height,
-    this.lineThrough = false,
+    this.underline = false,
     this.maxLines = 20,
   }) : super(key: key);
 
@@ -30,18 +30,17 @@ class CustomText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toString(),
-      textAlign: textAlign ?? TextAlign.start,
+      textAlign: textAlign ?? TextAlign.center,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
-          height: height ?? 1.4,
-          fontSize: fontSize,
-          fontFamily: fontFamily ?? AppFonts.regular,
-          color: color,
-          decoration:
-              lineThrough! ? TextDecoration.lineThrough : TextDecoration.none
-
-          // fontWeight: bold ? AppFonts.w700 : fontWeight,
-          ),
+        height: height ?? 1.4,
+        fontSize: fontSize,
+        fontFamily: fontFamily ?? AppFonts.regular,
+        color: color,
+        decoration: underline! ? TextDecoration.underline : TextDecoration.none,
+        decorationColor: color,
+        // fontWeight: bold ? AppFonts.w700 : fontWeight,
+      ),
       maxLines: maxLines,
     );
   }

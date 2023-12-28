@@ -75,11 +75,10 @@ class _DashboardState extends State<Dashboard> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  CustomButton(
-                                    width: 0.25.sw,
-                                    height: 40,
-                                    text: "رجوع",
+                                  TextButton(
                                     onPressed: () => Navigator.pop(context),
+                                    child: const CustomText(
+                                        text: "لا", fontSize: 18),
                                   ),
                                   CustomButton(
                                     width: 0.25.sw,

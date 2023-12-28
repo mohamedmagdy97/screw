@@ -6,11 +6,13 @@ class TitleWithValue extends StatelessWidget {
   final String title;
   final String value;
   final bool? highlight;
+  final bool? isSmaller;
 
   const TitleWithValue({
     super.key,
     required this.title,
     this.highlight = false,
+    this.isSmaller = false,
     required this.value,
   });
 
@@ -29,7 +31,9 @@ class TitleWithValue extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             color: highlight! ? AppColors.mainColor.withOpacity(0.2) : null,
             child: CustomText(
-                text: value, fontSize: 16, textAlign: TextAlign.center)),
+                text: value,
+                fontSize: isSmaller! ? 12 : 16,
+                textAlign: isSmaller! ? TextAlign.end : TextAlign.center)),
         const SizedBox(height: 16),
       ],
     );

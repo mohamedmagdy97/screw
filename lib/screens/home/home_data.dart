@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
-// import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
@@ -62,19 +60,19 @@ class HomeData {
         MaterialPageRoute(builder: (_) => Dashboard(players: players)));
     players.clear();
 
-    if (res) {
-      players.clear();
-      playerOne.clear();
-      playerTwo.clear();
-      playerThree.clear();
-      playerFour.clear();
-      playerFive.clear();
-      playerSix.clear();
-      listCubit.state.data!.clear();
-      listCubit.update(data: listCubit.state.data!);
-
-      init();
-    }
+    // if (res) {
+    //   players.clear();
+    //   playerOne.clear();
+    //   playerTwo.clear();
+    //   playerThree.clear();
+    //   playerFour.clear();
+    //   playerFive.clear();
+    //   playerSix.clear();
+    //   listCubit.state.data!.clear();
+    //   listCubit.update(data: listCubit.state.data!);
+    //
+    //   init();
+    // }
   }
 
   clearValues() {

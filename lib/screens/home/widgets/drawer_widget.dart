@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:screw_calc/components/custom_text.dart';
+import 'package:screw_calc/screens/contact_us/contact_us.dart';
 import 'package:screw_calc/screens/rules/rules_screen.dart';
 import 'package:screw_calc/utility/app_theme.dart';
 
@@ -44,20 +45,24 @@ class DrawerWidget extends StatelessWidget {
                     textAlign: TextAlign.end,
                   ),
                 ),
-                ListTile(
+                /*  ListTile(
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const RulesScreen()),
+                    MaterialPageRoute(builder: (_) => const ShowVideo()),
                   ),
                   title: const CustomText(
-                    text: "شرح اللعبة",
+                    text: "فيديو شرح اللعبة",
                     fontSize: 16,
                     textAlign: TextAlign.end,
                   ),
-                ),
-                const ListTile(
-                  title: CustomText(
-                    text: "حول التطبيق",
+                ),*/
+                ListTile(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ContactUS()),
+                  ),
+                  title: const CustomText(
+                    text: "للاقتراحات والتواصل معنا ",
                     fontSize: 16,
                     textAlign: TextAlign.end,
                   ),

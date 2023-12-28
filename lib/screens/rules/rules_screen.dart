@@ -63,11 +63,6 @@ class _RulesScreenState extends State<RulesScreen> {
             child: Image.asset("assets/icons/icon.png", height: 0.15.sh),
           ),
           const TitleWithValue(
-            title: "هدف اللعبة",
-            value:
-                "مع كل راوند تتخلص من الكروت التقيلة لحد ما يبقى معاك أقل سكور يخليك تقول سكرول\n بدل ما تلعب الراوند بتكمل لحد ما باقي اللاعيبه يلعبوا أخر لعبة ليهم وبنكشف الورق \n وصاحب أقل سكور بيكسب",
-          ),
-          const TitleWithValue(
             title: "قواعد اللعبة",
             highlight: true,
             value:
@@ -75,15 +70,17 @@ class _RulesScreenState extends State<RulesScreen> {
           ),
           const TitleWithValue(
             title: "تتكون اللعبة من",
+            isSmaller: true,
             value: "تتكون اللعبة من 58 كارت (أرقام عادية و كروت باور)\n "
                 "أرقام 7 و 8 بتخليك تشوف ورقة ذيادة من ورقك\n"
+                "أرقام 9 و 10 بتخليك تشوف ورقة ذيادة من لاعب تختاره\n"
                 "خد وهات بتخليك تبدل كارت مع حد تاني من غير ما تشوفه\n"
                 "كعب داير بتخليك تشوف كارت من كل لاعب وانت معاهم\n"
-                "البصره بتخليك تتخلص من كارت من الكروت اللي معاك\n",
+                "البصره بتخليك تتخلص من كارت من الكروت اللي معاك",
           ),
           Container(
             padding: const EdgeInsets.all(8),
-            margin: const EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.only(bottom: 20),
             color: AppColors.mainColor.withOpacity(0.2),
             child: const CustomText(
               text:
@@ -91,6 +88,11 @@ class _RulesScreenState extends State<RulesScreen> {
               fontSize: 16,
               textAlign: TextAlign.center,
             ),
+          ),
+          const TitleWithValue(
+            title: "هدف اللعبة",
+            value:
+                "مع كل راوند تتخلص من الكروت التقيلة لحد ما يبقى معاك أقل سكور يخليك تقول سكرول\n بدل ما تلعب الراوند بتكمل لحد ما باقي اللاعيبه يلعبوا أخر لعبة ليهم وبنكشف الورق \n وصاحب أقل سكور بيكسب",
           ),
           const TitleWithValue(
             title: "أهم كروت اللعبة",
