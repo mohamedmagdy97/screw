@@ -6,6 +6,7 @@ import 'package:screw_calc/components/custom_button.dart';
 import 'package:screw_calc/components/custom_text.dart';
 import 'package:screw_calc/components/text_filed_custom.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
+import 'package:screw_calc/main.dart';
 import 'package:screw_calc/models/item.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
 import 'package:screw_calc/screens/home/widgets/drawer_widget.dart';
@@ -30,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     homeData.loadAd();
+    loadAppOpen();
   }
 
   // final AdSize adSize = const AdSize(width: 300, height: 50);
@@ -81,37 +83,45 @@ class _MyHomePageState extends State<MyHomePage> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Wrap(
-                          spacing: 16.w,
-                          runSpacing: 16.h,
-                          children: List.generate(
-                            state.data!.length,
-                            (index) => InkWell(
-                              borderRadius: BorderRadius.circular(12.sp),
-                              onTap: () => homeData.onSelect(index),
-                              child: Container(
-                                width: (1.sw - 120.w) / 5,
-                                height: 50,
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                                decoration: BoxDecoration(
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            // spacing: 16.w,
+                            // runSpacing: 16.h,
+                            children: List.generate(
+                              state.data!.length,
+                              (index) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
                                   borderRadius: BorderRadius.circular(12.sp),
-                                  color: state.data![index].isActive!
-                                      ? AppColors.mainColor
-                                      : null,
-                                  border: Border.all(
-                                    color: !state.data![index].isActive!
-                                        ? AppColors.mainColor
-                                        : Colors.transparent,
+                                  onTap: () => homeData.onSelect(index),
+                                  child: Container(
+                                    width: (1.sw - 120.w) / 5,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(12.sp),
+                                      color: state.data![index].isActive!
+                                          ? AppColors.mainColor
+                                          : null,
+                                      border: Border.all(
+                                        color: !state.data![index].isActive!
+                                            ? AppColors.mainColor
+                                            : Colors.transparent,
+                                      ),
+                                    ),
+                                    child: CustomText(
+                                        text:
+                                            state.data![index].value.toString(),
+                                        fontSize: 18.sp),
                                   ),
                                 ),
-                                child: CustomText(
-                                    text: state.data![index].value.toString(),
-                                    fontSize: 18.sp),
                               ),
                             ),
-                          ).reversed.toList(),
+                          ),
                         ),
                         const SizedBox(height: 36),
                         CustomTextField(
@@ -177,6 +187,84 @@ class _MyHomePageState extends State<MyHomePage> {
                             controller: homeData.playerSix,
                             hintText: '',
                             labelText: 'ادخل اسم اللاعب السادس',
+                            containtPaddingRight: 0,
+                            inputType: TextInputType.text,
+                            textFieldVaidType:
+                                TextFieldValidatorType.displayText,
+                          ),
+                        if (state.data!
+                                .firstWhere((e) => e.isActive == true)
+                                .key! >=
+                            7)
+                          CustomTextField(
+                            controller: homeData.playerOne2,
+                            hintText: '',
+                            labelText: 'ادخل اسم اللاعب السابع',
+                            containtPaddingRight: 0,
+                            inputType: TextInputType.text,
+                            textFieldVaidType:
+                                TextFieldValidatorType.displayText,
+                          ),
+                        if (state.data!
+                                .firstWhere((e) => e.isActive == true)
+                                .key! >=
+                            8)
+                          CustomTextField(
+                            controller: homeData.playerTwo2,
+                            hintText: '',
+                            labelText: 'ادخل اسم اللاعب الثامن',
+                            containtPaddingRight: 0,
+                            inputType: TextInputType.text,
+                            textFieldVaidType:
+                                TextFieldValidatorType.displayText,
+                          ),
+                        if (state.data!
+                                .firstWhere((e) => e.isActive == true)
+                                .key! >=
+                            9)
+                          CustomTextField(
+                            controller: homeData.playerThree2,
+                            hintText: '',
+                            labelText: 'ادخل اسم اللاعب التاسع',
+                            containtPaddingRight: 0,
+                            inputType: TextInputType.text,
+                            textFieldVaidType:
+                                TextFieldValidatorType.displayText,
+                          ),
+                        if (state.data!
+                                .firstWhere((e) => e.isActive == true)
+                                .key! >=
+                            10)
+                          CustomTextField(
+                            controller: homeData.playerFour2,
+                            hintText: '',
+                            labelText: 'ادخل اسم اللاعب العاشر',
+                            containtPaddingRight: 0,
+                            inputType: TextInputType.text,
+                            textFieldVaidType:
+                                TextFieldValidatorType.displayText,
+                          ),
+                        if (state.data!
+                                .firstWhere((e) => e.isActive == true)
+                                .key! >=
+                            11)
+                          CustomTextField(
+                            controller: homeData.playerFive2,
+                            hintText: '',
+                            labelText: 'ادخل اسم اللاعب الحادي عشر',
+                            containtPaddingRight: 0,
+                            inputType: TextInputType.text,
+                            textFieldVaidType:
+                                TextFieldValidatorType.displayText,
+                          ),
+                        if (state.data!
+                                .firstWhere((e) => e.isActive == true)
+                                .key! >=
+                            12)
+                          CustomTextField(
+                            controller: homeData.playerSix2,
+                            hintText: '',
+                            labelText: 'ادخل اسم اللاعب الثاني عشر',
                             containtPaddingRight: 0,
                             inputType: TextInputType.text,
                             textFieldVaidType:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:screw_calc/components/custom_text.dart';
 import 'package:screw_calc/screens/contact_us/contact_us.dart';
+import 'package:screw_calc/screens/history/history.dart';
 import 'package:screw_calc/screens/rules/rules_screen.dart';
 import 'package:screw_calc/utility/app_theme.dart';
 
@@ -34,6 +35,17 @@ class DrawerWidget extends StatelessWidget {
                   child: CustomText(text: "آهلا بيك يا صديقي", fontSize: 16),
                 ),
                 const Divider(endIndent: 10, indent: 10),
+                ListTile(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const HistoryScreen()),
+                  ),
+                  title: const CustomText(
+                    text: "الجولات السابقة",
+                    fontSize: 16,
+                    textAlign: TextAlign.end,
+                  ),
+                ),
                 ListTile(
                   onTap: () => Navigator.push(
                     context,
@@ -76,7 +88,7 @@ class DrawerWidget extends StatelessWidget {
                 // ),
                 const Spacer(),
                 const CustomText(
-                  text: "version 1.0.0",
+                  text: "version 1.0.4",
                   fontSize: 16,
                 ),
               ],

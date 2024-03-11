@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -21,11 +20,18 @@ class HomeData {
   final TextEditingController playerFive = TextEditingController();
   final TextEditingController playerSix = TextEditingController();
 
+  final TextEditingController playerOne2 = TextEditingController();
+  final TextEditingController playerTwo2 = TextEditingController();
+  final TextEditingController playerThree2 = TextEditingController();
+  final TextEditingController playerFour2 = TextEditingController();
+  final TextEditingController playerFive2 = TextEditingController();
+  final TextEditingController playerSix2 = TextEditingController();
+
   List<PlayerModel> players = [];
 
   init() async {
     List.generate(
-        5,
+        11,
         (index) => listCubit.state.data!.add(
             Item(key: (index + 2), value: "${index + 2}", isActive: false)));
 
@@ -53,6 +59,12 @@ class HomeData {
     players.add(PlayerModel(id: 4, name: playerFour.text ?? ""));
     players.add(PlayerModel(id: 5, name: playerFive.text ?? ""));
     players.add(PlayerModel(id: 6, name: playerSix.text ?? ""));
+    players.add(PlayerModel(id: 7, name: playerOne2.text ?? ""));
+    players.add(PlayerModel(id: 8, name: playerTwo2.text ?? ""));
+    players.add(PlayerModel(id: 9, name: playerThree2.text ?? ""));
+    players.add(PlayerModel(id: 10, name: playerFour2.text ?? ""));
+    players.add(PlayerModel(id: 11, name: playerFive2.text ?? ""));
+    players.add(PlayerModel(id: 12, name: playerSix2.text ?? ""));
 
     players.removeWhere((e) => e.name!.isEmpty);
 
@@ -113,10 +125,7 @@ class HomeData {
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
-        // Called when an ad is successfully received.
         onAdLoaded: (ad) {
-          log('?>>>>>DFFDDFDF==${ad.responseInfo!.loadedAdapterResponseInfo!.description} loaded.');
-
           isLoadedCubit.update(data: true);
         },
         // Called when an ad request failed.
@@ -125,18 +134,9 @@ class HomeData {
           // Dispose the ad here to free resources.
           ad.dispose();
         },
-        // Called when an ad opens an overlay that covers the screen.
-        onAdOpened: (Ad ad) {
-          log('?>>>>>DFFDDFDF onAdOpened ==${ad.responseInfo!.loadedAdapterResponseInfo!.description} onAdOpened.');
-        },
-        // Called when an ad removes an overlay that covers the screen.
-        onAdClosed: (Ad ad) {
-          log('?>>>>>DFFDDFDF onAdClosed ==${ad.responseInfo!.loadedAdapterResponseInfo!.description} onAdClosed.');
-        },
-        // Called when an impression occurs on the ad.
-        onAdImpression: (Ad ad) {
-          log('?>>>>>DFFDDFDF onAdImpression ==${ad.responseInfo!.loadedAdapterResponseInfo!.description} onAdImpression.');
-        },
+        onAdOpened: (Ad ad) {},
+        onAdClosed: (Ad ad) {},
+        onAdImpression: (Ad ad) {},
       ),
     )..load();
   }

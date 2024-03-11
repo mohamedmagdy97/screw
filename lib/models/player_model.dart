@@ -8,6 +8,7 @@ class PlayerModel {
   String? gw5;
   String? total;
   bool? isActive;
+  bool? isFavorite;
 
   PlayerModel({
     this.id,
@@ -19,6 +20,7 @@ class PlayerModel {
     this.gw5 = "",
     this.total = "0",
     this.isActive = false,
+    this.isFavorite = false,
   });
 
   factory PlayerModel.fromJson(Map<String, dynamic> json) => PlayerModel(
@@ -31,6 +33,7 @@ class PlayerModel {
         gw5: json["gw5"] ?? "",
         total: json["total"] ?? "0",
         isActive: json["isActive"] ?? false,
+    isFavorite: json["isFavorite"] ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,5 +46,6 @@ class PlayerModel {
         "gw5": gw5,
         "total": total,
         "isActive": isActive ?? false,
+        "isFavorite": isFavorite ?? false,
       };
 }

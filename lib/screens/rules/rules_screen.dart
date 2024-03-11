@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/components/custom_text.dart';
+import 'package:screw_calc/main.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
 import 'package:screw_calc/screens/rules/widgets/title_with_value.dart';
 import 'package:screw_calc/utility/app_theme.dart';
@@ -24,6 +25,7 @@ class _RulesScreenState extends State<RulesScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     homeData.loadAd();
+    loadAppOpen();
   }
 
   @override
@@ -62,6 +64,26 @@ class _RulesScreenState extends State<RulesScreen> {
             padding: const EdgeInsets.symmetric(vertical: 32.0),
             child: Image.asset("assets/icons/icon.png", height: 0.15.sh),
           ),
+          CustomText(text: "الكروت الجديدة", fontSize: 16.sp),
+          const Divider(),
+          const TitleWithValue(
+            title: "كارت خد بس",
+            highlight: true,
+            value: "دا بيخليك تتخلص من ورقة من عندك وتلبسها لغيرك",
+          ),
+          const TitleWithValue(
+            title: "SEE And SWAP كارت",
+            highlight: true,
+            value:
+                "دا بيخليك تشوف ورقة من عند غيرك وتبدلها من عندك أو من عند حد من الاعبين",
+          ),
+          const TitleWithValue(
+            title: "كارت الحرامي",
+            highlight: true,
+            value:
+                "دا زي كعب داير تشوف ورقة من عند الكل الا نفسك ولازم تاخد ورقة من اللي شوفتها",
+          ),
+          const Divider(),
           const TitleWithValue(
             title: "قواعد اللعبة",
             highlight: true,

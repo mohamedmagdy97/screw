@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/components/custom_text.dart';
+import 'package:screw_calc/main.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
 import 'package:screw_calc/utility/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,6 +25,7 @@ class _ContactUSState extends State<ContactUS> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     homeData.loadAd();
+    loadAppOpen();
   }
 
   @override
@@ -55,28 +57,43 @@ class _ContactUSState extends State<ContactUS> {
               child: AdWidget(ad: homeData.bannerAd!),
             )
           : null,
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 32.0),
-            child: CustomText(text: "آهلا بيك يا صديقي", fontSize: 16),
-          ),
-          const CustomText(text: "يمكنك محادثتنا من خلال", fontSize: 16),
-          const SizedBox(height: 16),
-          InkWell(
-            onTap: () async {
-              String url = "https://wa.me/+201149504892";
+          Expanded(
+            child: Column(
+              // padding: const EdgeInsets.all(16),
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 32.0),
+                  child: CustomText(text: "آهلا بيك يا صديقي", fontSize: 16),
+                ),
+                const CustomText(text: "يمكنك محادثتنا من خلال", fontSize: 16),
+                const SizedBox(height: 16),
+                InkWell(
+                  onTap: () async {
+                    String url = "https://wa.me/+201149504892";
 
-              if (await canLaunchUrl(Uri.parse(url))) {
-                await launchUrl(Uri.parse(url));
-              }
-            },
+                    if (await canLaunchUrl(Uri.parse(url))) {
+                      await launchUrl(Uri.parse(url));
+                    }
+                  },
+                  child: const CustomText(
+                    text: "الواتس اب",
+                    fontSize: 16,
+                    color: AppColors.green,
+                    underline: true,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: AppColors.mainColor,
             child: const CustomText(
-              text: "الواتس اب",
-              fontSize: 16,
-              color: AppColors.green,
-              underline: true,
+              text:
+                  "التطبيق لا ينتمي للأستاذ يحى عزام ولكن لمطورية فقط, ورقم الواتس المرفق للاقترحات والشكاوى",
+              fontSize: 14,
             ),
           ),
         ],

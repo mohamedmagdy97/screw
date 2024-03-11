@@ -26,7 +26,7 @@ class TitleWithValue extends StatelessWidget {
           textAlign: TextAlign.center,
           color: AppColors.mainColor,
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: highlight! ? 4 : 0),
         Container(
             padding: const EdgeInsets.all(8),
             color: highlight! ? AppColors.mainColor.withOpacity(0.2) : null,
@@ -34,7 +34,7 @@ class TitleWithValue extends StatelessWidget {
                 text: value,
                 fontSize: isSmaller! ? 12 : 16,
                 textAlign: isSmaller! ? TextAlign.end : TextAlign.center)),
-        const SizedBox(height: 16),
+        SizedBox(height: highlight! ? 16 : 8),
       ],
     );
   }
