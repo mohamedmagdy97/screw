@@ -32,7 +32,7 @@ class TitleWithValue extends StatelessWidget {
             color: highlight! ? AppColors.mainColor.withOpacity(0.2) : null,
             child: CustomText(
                 text: value,
-                fontSize: isSmaller! ? 12 : 16,
+                fontSize: isSmaller! ? 12 : 14,
                 textAlign: isSmaller! ? TextAlign.end : TextAlign.center)),
         SizedBox(height: highlight! ? 16 : 8),
       ],

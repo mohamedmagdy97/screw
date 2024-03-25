@@ -9,6 +9,7 @@ import 'package:screw_calc/components/custom_button.dart';
 import 'package:screw_calc/components/custom_text.dart';
 import 'package:screw_calc/components/text_filed_custom.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
+import 'package:screw_calc/helpers/ad_manager.dart';
 import 'package:screw_calc/models/game_model.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/utility/app_theme.dart';
@@ -354,7 +355,9 @@ class DashboardData {
       listGames.add(GameModel(game: listPlayers));
       addGameToDB();
       Utilities().customSnackBarTerms(context, txt: "تم حفظ الجولة");
+      AdManager().loadRewardedInterstitialAd();
       Navigator.pop(context);
+      // AdManager().loadInterstitialAd();
     } else {
       Utilities().customSnackBarTerms(context,
           txt: "لحفظ النتائج يجب ادخال جميع الجولات");

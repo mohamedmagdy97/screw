@@ -68,7 +68,7 @@ class HomeData {
 
     players.removeWhere((e) => e.name!.isEmpty);
 
-    bool res = await Navigator.push(context,
+   /* bool res = */await Navigator.push(context,
         MaterialPageRoute(builder: (_) => Dashboard(players: players)));
     players.clear();
 

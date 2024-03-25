@@ -58,37 +58,39 @@ class _RulesScreenState extends State<RulesScreen> {
             )
           : null,
       body: ListView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(16),
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32.0),
-            child: Image.asset("assets/icons/icon.png", height: 0.15.sh),
+            padding: const EdgeInsets.symmetric(vertical: 28.0),
+            child: Image.asset("assets/icons/icon.png", height: 0.10.sh),
           ),
           CustomText(text: "الكروت الجديدة", fontSize: 16.sp),
           const Divider(),
           const TitleWithValue(
             title: "كارت خد بس",
             highlight: true,
-            value: "دا بيخليك تتخلص من ورقة من عندك وتلبسها لغيرك",
+            value:
+                "دا زي كارت خد وهات بس الفرق انك بتدي بس يعني هتتخلص من كارت من كروتك وتعطيه لحد غيرك",
           ),
           const TitleWithValue(
             title: "SEE And SWAP كارت",
             highlight: true,
             value:
-                "دا بيخليك تشوف ورقة من عند غيرك وتبدلها من عندك أو من عند حد من الاعبين",
+                "دا بيخليك تشوف ورقة من عند غيرك ولازم تبدلها من عندك وخد بالك انت بتديله كارت من عندك من غير ما تشوفه سواء كنت عارفه أو لا",
+            // "دا بيخليك تشوف ورقة من عند غيرك ولازم تبدلها من عندك أو من عند حد من الاعبين",
           ),
           const TitleWithValue(
             title: "كارت الحرامي",
             highlight: true,
             value:
-                "دا زي كعب داير تشوف ورقة من عند الكل الا نفسك ولازم تاخد ورقة من اللي شوفتها",
+                " كارت لما بتسحبه مش بترميه ولو كان معاك برضو بتخليه معاك عادي , لان انت بتحتاجه لما حد غيرك يقول اسكرو والكارت معاك وبعد ما الدور يلف وكله يكشف ورقه بيقول فلان الحرام لو طلع كلامه صح يبق كده كارت الحرامي مات لو طلع غلط دا يخلي الشخص اللي معاه كارت الحرامي ياخد اسكور اللي قال سكرو وهو ياخد الاسكور بتاعه , يعني بيبدلوا الاسكور بتاعهم مع بعض,  \n وممكن ترميه عل الارض ويتحرق على الكل ولو كان الحرامي معاك واللي قال سكرو قال انه معاك قبل ما يكشف ورقة بيتحسب عليك بقيمتة اللي هي 10",
           ),
           const Divider(),
           const TitleWithValue(
             title: "قواعد اللعبة",
             highlight: true,
             value:
-                "كل لاعب بيبدأ معاه 4 كروت, مسموحله يشوف كارتين بس في أول الجيم ومينغعش يغير مكان أي كارت منهم",
+                " كل لاعب بيبدأ معاه 4 كروت, مسموحله يشوف كارتين بس في أول الجيم ومينغعش يغير مكان أي كارت منهم",
           ),
           const TitleWithValue(
             title: "تتكون اللعبة من",

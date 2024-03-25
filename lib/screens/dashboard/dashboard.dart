@@ -5,6 +5,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/components/custom_button.dart';
 import 'package:screw_calc/components/custom_text.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
+import 'package:screw_calc/helpers/ad_manager.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/screens/dashboard/dashboard_data.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
@@ -36,12 +37,16 @@ class _DashboardState extends State<Dashboard> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     homeData.loadAd();
+    // AdManager().loadRewardedInterstitialAd();
+    AdManager().loadInterstitialAd();
     dashboardData.loadNativeAdvanced();
   }
 
   @override
   void dispose() {
     dashboardData.nativeAd!.dispose();
+    AdManager().disposeAds();
+
     super.dispose();
   }
 
@@ -91,7 +96,11 @@ class _DashboardState extends State<Dashboard> {
     }
 
     return WillPopScope(
-      onWillPop: () => homeData.onWillPop(context),
+      onWillPop: () {
+        Navigator.pop(context, true);
+        return Future.value(true);
+      },
+      // homeData.onWillPop(context),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
