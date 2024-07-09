@@ -6,6 +6,7 @@ import 'package:screw_calc/components/custom_button.dart';
 import 'package:screw_calc/components/custom_text.dart';
 import 'package:screw_calc/components/text_filed_custom.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
+import 'package:screw_calc/helpers/app_life_sycle.dart';
 import 'package:screw_calc/main.dart';
 import 'package:screw_calc/models/item.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
@@ -23,6 +24,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
+    // WidgetsBinding.instance.addObserver(
+    //   LifecycleEventHandler(
+    //     resumeCallBack: () async => setState(
+    //           () {
+    //         // print('looooooooooool ===');
+    //       },
+    //     ),
+    //   ),
+    // );
     homeData.init();
     super.initState();
   }

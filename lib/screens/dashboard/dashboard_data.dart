@@ -261,70 +261,144 @@ class DashboardData {
                       },
                     ),
                     const SizedBox(height: 16),
-                    if (player.gw5!.isEmpty &&
-                        player.gw4!.isNotEmpty &&
-                        player.gw3!.isNotEmpty &&
-                        player.gw2!.isNotEmpty &&
-                        player.gw1!.isNotEmpty)
-                      CustomButton(
-                        text: ' 2 x آحسب النتيجه ',
-                        onPressed: () {
-                          if (!formKey.currentState!.validate()) {
-                            return;
-                          }
-                          Navigator.pop(context);
-                          if (player.gw1!.isEmpty) {
-                            player.gw1 = controller.text;
+                    // if (player.gw5!.isEmpty &&
+                    //     player.gw4!.isNotEmpty &&
+                    //     player.gw3!.isNotEmpty &&
+                    //     player.gw2!.isNotEmpty &&
+                    //     player.gw1!.isNotEmpty)
+                    CustomButton(
+                      text: ' 2 x آحسب النتيجه ',
+                      onPressed: () {
+                        if (!formKey.currentState!.validate()) {
+                          return;
+                        }
+                        Navigator.pop(context);
+                        if (player.gw1!.isEmpty) {
+                          player.gw1 =
+                              (int.parse(controller.text.toString()) * 2)
+                                  .toString();
 
-                            player.total =
-                                (int.parse(player.gw1.toString())).toString();
-                          } else if (player.gw2!.isEmpty &&
-                              player.gw1!.isNotEmpty) {
-                            player.gw2 = controller.text;
+                          player.total =
+                              (int.parse(player.gw1.toString())).toString();
+                        } else if (player.gw2!.isEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw2 =
+                              (int.parse(controller.text.toString()) * 2)
+                                  .toString();
 
-                            player.total = (int.parse(player.gw1.toString()) +
-                                    int.parse(player.gw2.toString()))
-                                .toString();
-                          } else if (player.gw3!.isEmpty &&
-                              player.gw2!.isNotEmpty &&
-                              player.gw1!.isNotEmpty) {
-                            player.gw3 = controller.text;
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()))
+                              .toString();
+                        } else if (player.gw3!.isEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw3 =
+                              (int.parse(controller.text.toString()) * 2)
+                                  .toString();
 
-                            player.total = (int.parse(player.gw1.toString()) +
-                                    int.parse(player.gw2.toString()) +
-                                    int.parse(player.gw3.toString()))
-                                .toString();
-                          } else if (player.gw4!.isEmpty &&
-                              player.gw3!.isNotEmpty &&
-                              player.gw2!.isNotEmpty &&
-                              player.gw1!.isNotEmpty) {
-                            player.gw4 = controller.text;
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()))
+                              .toString();
+                        } else if (player.gw4!.isEmpty &&
+                            player.gw3!.isNotEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw4 =
+                              (int.parse(controller.text.toString()) * 2)
+                                  .toString();
 
-                            player.total = (int.parse(player.gw1.toString()) +
-                                    int.parse(player.gw2.toString()) +
-                                    int.parse(player.gw3.toString()) +
-                                    int.parse(player.gw4.toString()))
-                                .toString();
-                          } else if (player.gw5!.isEmpty &&
-                              player.gw4!.isNotEmpty &&
-                              player.gw3!.isNotEmpty &&
-                              player.gw2!.isNotEmpty &&
-                              player.gw1!.isNotEmpty) {
-                            player.gw5 =
-                                (int.parse(controller.text.toString()) * 2)
-                                    .toString();
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()) +
+                                  int.parse(player.gw4.toString()))
+                              .toString();
+                        } else if (player.gw5!.isEmpty &&
+                            player.gw4!.isNotEmpty &&
+                            player.gw3!.isNotEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw5 =
+                              (int.parse(controller.text.toString()) * 2)
+                                  .toString();
 
-                            player.total = (int.parse(player.gw1.toString()) +
-                                    int.parse(player.gw2.toString()) +
-                                    int.parse(player.gw3.toString()) +
-                                    int.parse(player.gw4.toString()) +
-                                    (int.parse(player.gw5.toString())))
-                                .toString();
-                          }
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()) +
+                                  int.parse(player.gw4.toString()) +
+                                  (int.parse(player.gw5.toString())))
+                              .toString();
+                        }
 
-                          controller.clear();
-                        },
-                      ),
+                        controller.clear();
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomButton(
+                      text: ' سكرو (0) ',
+                      onPressed: () {
+                        controller.text = "0";
+                        if (!formKey.currentState!.validate()) {
+                          return;
+                        }
+                        Navigator.pop(context);
+                        if (player.gw1!.isEmpty) {
+                          player.gw1 = "0";
+
+                          player.total =
+                              (int.parse(player.gw1.toString())).toString();
+                        } else if (player.gw2!.isEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw2 = "0";
+
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()))
+                              .toString();
+                        } else if (player.gw3!.isEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw3 = "0";
+
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()))
+                              .toString();
+                        } else if (player.gw4!.isEmpty &&
+                            player.gw3!.isNotEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw4 = "0";
+
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()) +
+                                  int.parse(player.gw4.toString()))
+                              .toString();
+                        } else if (player.gw5!.isEmpty &&
+                            player.gw4!.isNotEmpty &&
+                            player.gw3!.isNotEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw5 = "0";
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()) +
+                                  int.parse(player.gw4.toString()) +
+                                  (int.parse(player.gw5.toString())))
+                              .toString();
+                        }
+
+                        controller.clear();
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+                    CustomText(
+                      text: "انتبه لا يمكن التعديل على النتيجة",
+                      fontSize: 14.sp,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    )
                   ],
                 ),
               ),

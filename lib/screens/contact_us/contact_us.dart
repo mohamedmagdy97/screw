@@ -67,7 +67,7 @@ class _ContactUSState extends State<ContactUS> {
                   padding: EdgeInsets.symmetric(vertical: 32.0),
                   child: CustomText(text: "آهلا بيك يا صديقي", fontSize: 16),
                 ),
-                const CustomText(text: "يمكنك محادثتنا من خلال", fontSize: 16),
+                const CustomText(text: "يمكنك محادثتنا للأسئلة والاستفسارات من خلال", fontSize: 16),
                 const SizedBox(height: 16),
                 InkWell(
                   onTap: () async {
@@ -79,7 +79,7 @@ class _ContactUSState extends State<ContactUS> {
                   },
                   child: const CustomText(
                     text: "الواتس اب",
-                    fontSize: 16,
+                    fontSize: 20,
                     color: AppColors.green,
                     underline: true,
                   ),
@@ -87,6 +87,9 @@ class _ContactUSState extends State<ContactUS> {
               ],
             ),
           ),
+          const CustomText(text: "نحن لا نبيع اللعبة ولكن يمكنك الارسال لمساعدتنا بتحسين التطبيق ومعرفة اخر التطبيقات", fontSize: 16),
+          const SizedBox(height: 16),
+
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: AppColors.mainColor,
