@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/components/custom_button.dart';
 import 'package:screw_calc/components/custom_text.dart';
+import 'package:screw_calc/components/text_filed_custom.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
 import 'package:screw_calc/helpers/ad_manager.dart';
 import 'package:screw_calc/models/player_model.dart';
@@ -11,6 +12,7 @@ import 'package:screw_calc/screens/dashboard/dashboard_data.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
 import 'package:screw_calc/screens/home/widgets/marquee_widget.dart';
 import 'package:screw_calc/utility/app_theme.dart';
+import 'package:screw_calc/utility/validation_form.dart';
 
 class Dashboard extends StatefulWidget {
   final List<PlayerModel> players;
@@ -28,7 +30,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    homeData.loadAd();
+    // homeData.loadAd();
     dashboardData.init();
     super.initState();
   }
@@ -36,7 +38,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    homeData.loadAd();
+    // homeData.loadAd();
     // AdManager().loadRewardedInterstitialAd();
     AdManager().loadInterstitialAd();
     dashboardData.loadNativeAdvanced();
@@ -172,14 +174,14 @@ class _DashboardState extends State<Dashboard> {
           ],
           title: CustomText(text: "النتائج", fontSize: 22.sp),
         ),
-        bottomNavigationBar: homeData.bannerAd != null
+        /*bottomNavigationBar: homeData.bannerAd != null
             ? Container(
                 color: AppColors.grayy,
                 width: homeData.bannerAd!.size.width.toDouble(),
                 height: homeData.bannerAd!.size.height.toDouble(),
                 child: AdWidget(ad: homeData.bannerAd!),
               )
-            : null,
+            : null,*/
         backgroundColor: AppColors.bg,
         body: Directionality(
           textDirection: TextDirection.rtl,
@@ -200,7 +202,7 @@ class _DashboardState extends State<Dashboard> {
                               direction: Axis.horizontal,
                               child: CustomText(
                                 text:
-                                    "              صلي على النبي, سبحان الله والحمد لله ولا اله الا الله ولا حول ولا قوة الا بالله, استغفر الله العظيم وأتوب اليه, لا اله الا انت سباحانك اني كنت من الظالمين        ",
+                                    "              صلي على النبي, سبحان الله والحمد لله ولا اله الا الله ولا حول ولا قوة الا بالله, استغفر الله العظيم وأتوب اليه, لا اله الا انت سبحانك اني كنت من الظالمين        ",
                                 fontSize: 16,
                               ),
                             ),
@@ -328,7 +330,7 @@ class _DashboardState extends State<Dashboard> {
                                           child: IconButton(
                                             onPressed: () {
                                               // dashboardData.checkAllGwPlayed(gw,widget.players,index);
-                                              dashboardData.addValue(context,
+                                              addValue(context,
                                                   player:
                                                       widget.players[index]);
                                             },
@@ -396,5 +398,249 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
     );
+  }
+
+  addValue(context, {required PlayerModel player}) {
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              title: Directionality(
+                textDirection: TextDirection.rtl,
+                child: CustomText(
+                  text: 'نتيجة الاعب ${player.name} في الجولة ',
+                  fontSize: 14.sp,
+                  textAlign: TextAlign.center,
+                  color: AppColors.black,
+                ),
+              ),
+              content: Form(
+                key: dashboardData.formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomTextField(
+                      controller: dashboardData.controller,
+                      hintText: '',
+                      labelText: '',
+                      containtPaddingRight: 0,
+                      inputType: TextInputType.number,
+                      fillColor: Colors.white,
+                      textColor: Colors.black,
+                      fillBorderColor: AppColors.grayy,
+                      textFieldVaidType: TextFieldValidatorType.Number,
+                    ),
+                    const SizedBox(height: 16),
+                    CustomButton(
+                      text: 'التالي',
+                      onPressed: () {
+                        if (!dashboardData.formKey.currentState!.validate()) {
+                          return;
+                        }
+                        Navigator.pop(context);
+                        if (player.gw1!.isEmpty) {
+                          player.gw1 = dashboardData.controller.text;
+
+                          player.total =
+                              (int.parse(player.gw1.toString())).toString();
+                        } else if (player.gw2!.isEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw2 = dashboardData.controller.text;
+
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()))
+                              .toString();
+                        } else if (player.gw3!.isEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw3 = dashboardData.controller.text;
+
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()))
+                              .toString();
+                        } else if (player.gw4!.isEmpty &&
+                            player.gw3!.isNotEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw4 = dashboardData.controller.text;
+
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()) +
+                                  int.parse(player.gw4.toString()))
+                              .toString();
+                        } else if (player.gw5!.isEmpty &&
+                            player.gw4!.isNotEmpty &&
+                            player.gw3!.isNotEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw5 = dashboardData.controller.text;
+
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()) +
+                                  int.parse(player.gw4.toString()) +
+                                  int.parse(player.gw5.toString()))
+                              .toString();
+                        }
+
+                        dashboardData.controller.clear();
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    // if (player.gw5!.isEmpty &&
+                    //     player.gw4!.isNotEmpty &&
+                    //     player.gw3!.isNotEmpty &&
+                    //     player.gw2!.isNotEmpty &&
+                    //     player.gw1!.isNotEmpty)
+                      CustomButton(
+                        text: ' 2 x آحسب النتيجه ',
+                        onPressed: () {
+                          if (!dashboardData.formKey.currentState!.validate()) {
+                            return;
+                          }
+                          Navigator.pop(context);
+                          if (player.gw1!.isEmpty) {
+                            player.gw1 = (int.parse(dashboardData
+                                        .controller.text
+                                        .toString()) *
+                                    2)
+                                .toString();
+
+                            player.total =
+                                (int.parse(player.gw1.toString())).toString();
+                          } else if (player.gw2!.isEmpty &&
+                              player.gw1!.isNotEmpty) {
+                            player.gw2 = (int.parse(dashboardData
+                                        .controller.text
+                                        .toString()) *
+                                    2)
+                                .toString();
+
+                            player.total = (int.parse(player.gw1.toString()) +
+                                    int.parse(player.gw2.toString()))
+                                .toString();
+                          } else if (player.gw3!.isEmpty &&
+                              player.gw2!.isNotEmpty &&
+                              player.gw1!.isNotEmpty) {
+                            player.gw3 = (int.parse(dashboardData
+                                        .controller.text
+                                        .toString()) *
+                                    2)
+                                .toString();
+
+                            player.total = (int.parse(player.gw1.toString()) +
+                                    int.parse(player.gw2.toString()) +
+                                    int.parse(player.gw3.toString()))
+                                .toString();
+                          } else if (player.gw4!.isEmpty &&
+                              player.gw3!.isNotEmpty &&
+                              player.gw2!.isNotEmpty &&
+                              player.gw1!.isNotEmpty) {
+                            player.gw4 = (int.parse(dashboardData
+                                        .controller.text
+                                        .toString()) *
+                                    2)
+                                .toString();
+
+                            player.total = (int.parse(player.gw1.toString()) +
+                                    int.parse(player.gw2.toString()) +
+                                    int.parse(player.gw3.toString()) +
+                                    int.parse(player.gw4.toString()))
+                                .toString();
+                          } else if (player.gw5!.isEmpty &&
+                              player.gw4!.isNotEmpty &&
+                              player.gw3!.isNotEmpty &&
+                              player.gw2!.isNotEmpty &&
+                              player.gw1!.isNotEmpty) {
+                            player.gw5 = (int.parse(dashboardData
+                                        .controller.text
+                                        .toString()) *
+                                    2)
+                                .toString();
+
+                            player.total = (int.parse(player.gw1.toString()) +
+                                    int.parse(player.gw2.toString()) +
+                                    int.parse(player.gw3.toString()) +
+                                    int.parse(player.gw4.toString()) +
+                                    (int.parse(player.gw5.toString())))
+                                .toString();
+                          }
+
+                          dashboardData.controller.clear();
+                          setState(() {});
+                        },
+                      ),
+                    const SizedBox(height: 16),
+                    CustomButton(
+                      text: ' سكرو (0) ',
+                      onPressed: () {
+                        dashboardData.controller.text = "0";
+                        // if (!formKey.currentState!.validate()) {
+                        //   return;
+                        // }
+                        Navigator.pop(context);
+                        if (player.gw1!.isEmpty) {
+                          player.gw1 = "0";
+
+                          player.total =
+                              (int.parse(player.gw1.toString())).toString();
+                        } else if (player.gw2!.isEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw2 = "0";
+
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()))
+                              .toString();
+                        } else if (player.gw3!.isEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw3 = "0";
+
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()))
+                              .toString();
+                        } else if (player.gw4!.isEmpty &&
+                            player.gw3!.isNotEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw4 = "0";
+
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()) +
+                                  int.parse(player.gw4.toString()))
+                              .toString();
+                        } else if (player.gw5!.isEmpty &&
+                            player.gw4!.isNotEmpty &&
+                            player.gw3!.isNotEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw5 = "0";
+                          player.total = (int.parse(player.gw1.toString()) +
+                                  int.parse(player.gw2.toString()) +
+                                  int.parse(player.gw3.toString()) +
+                                  int.parse(player.gw4.toString()) +
+                                  (int.parse(player.gw5.toString())))
+                              .toString();
+                        }
+
+                        dashboardData.controller.clear();
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomText(
+                      text: "انتبه لا يمكن التعديل على النتيجة",
+                      fontSize: 14.sp,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    )
+                  ],
+                ),
+              ),
+            ));
   }
 }
