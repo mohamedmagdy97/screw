@@ -4,6 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/components/custom_text.dart';
 import 'package:screw_calc/main.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
+import 'package:screw_calc/screens/rules/widgets/title_with_value.dart';
 import 'package:screw_calc/utility/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,7 +68,9 @@ class _ContactUSState extends State<ContactUS> {
                   padding: EdgeInsets.symmetric(vertical: 32.0),
                   child: CustomText(text: "آهلا بيك يا صديقي", fontSize: 16),
                 ),
-                const CustomText(text: "يمكنك محادثتنا للأسئلة والاستفسارات من خلال", fontSize: 16),
+                const CustomText(
+                    text: "يمكنك محادثتنا للأسئلة والاستفسارات من خلال",
+                    fontSize: 16),
                 const SizedBox(height: 16),
                 InkWell(
                   onTap: () async {
@@ -84,12 +87,21 @@ class _ContactUSState extends State<ContactUS> {
                     underline: true,
                   ),
                 ),
+                const SizedBox(height: 16),
+                TitleWithValue(
+                  title: "",
+                  highlight: true,
+                  value:
+                      "وايضا اذا رأيت اعلان غير مناسب يرجى ابلاغنا لحذفه وعدم ظهوره مرة اخرى",
+                )
               ],
             ),
           ),
-          const CustomText(text: "نحن لا نبيع اللعبة ولكن يمكنك الارسال لمساعدتنا بتحسين التطبيق ومعرفة اخر التطبيقات", fontSize: 16),
+          const CustomText(
+              text:
+                  "نحن لا نبيع اللعبة ولكن يمكنك الارسال لمساعدتنا بتحسين التطبيق ومعرفة اخر التطبيقات",
+              fontSize: 16),
           const SizedBox(height: 16),
-
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: AppColors.mainColor,

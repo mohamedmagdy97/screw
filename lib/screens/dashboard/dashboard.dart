@@ -202,7 +202,7 @@ class _DashboardState extends State<Dashboard> {
                               direction: Axis.horizontal,
                               child: CustomText(
                                 text:
-                                    "              صلي على النبي, سبحان الله والحمد لله ولا اله الا الله ولا حول ولا قوة الا بالله, استغفر الله العظيم وأتوب اليه, لا اله الا انت سبحانك اني كنت من الظالمين        ",
+                                    "            صلي على النبي, لا اله الا الله وحده لا شريك له, له الملك وله الحمد يحي ويميت وهو على كل شيء قدير, سبحان الله والحمد لله ولا اله الا الله ولا حول ولا قوة الا بالله, استغفر الله العظيم وأتوب اليه, لا اله الا انت سبحانك اني كنت من الظالمين .            ",
                                 fontSize: 16,
                               ),
                             ),
@@ -494,8 +494,9 @@ class _DashboardState extends State<Dashboard> {
                     //     player.gw3!.isNotEmpty &&
                     //     player.gw2!.isNotEmpty &&
                     //     player.gw1!.isNotEmpty)
+                    /// 2 x آحسب النتيجه
                       CustomButton(
-                        text: ' 2 x آحسب النتيجه ',
+                        text: ' 2 x احسب النتيجة ',
                         onPressed: () {
                           if (!dashboardData.formKey.currentState!.validate()) {
                             return;
@@ -572,7 +573,46 @@ class _DashboardState extends State<Dashboard> {
                           setState(() {});
                         },
                       ),
+                    /// 4 x آحسب النتيجه
+                    if (player.gw5!.isEmpty &&
+                        player.gw4!.isNotEmpty &&
+                        player.gw3!.isNotEmpty &&
+                        player.gw2!.isNotEmpty &&
+                        player.gw1!.isNotEmpty)
+                   ...[
+                     const SizedBox(height: 16),
+                     CustomButton(
+                      text: ' 4 x احسب النتيجة ',
+                      onPressed: () {
+                        if (!dashboardData.formKey.currentState!.validate()) {
+                          return;
+                        }
+                        Navigator.pop(context);
+                              if (player.gw5!.isEmpty &&
+                            player.gw4!.isNotEmpty &&
+                            player.gw3!.isNotEmpty &&
+                            player.gw2!.isNotEmpty &&
+                            player.gw1!.isNotEmpty) {
+                          player.gw5 = (int.parse(dashboardData
+                              .controller.text
+                              .toString()) *
+                              4)
+                              .toString();
+                          player.total = (int.parse(player.gw1.toString()) +
+                              int.parse(player.gw2.toString()) +
+                              int.parse(player.gw3.toString()) +
+                              int.parse(player.gw4.toString()) +
+                              (int.parse(player.gw5.toString())))
+                              .toString();
+                        }
+
+                        dashboardData.controller.clear();
+                        setState(() {});
+                      },
+                    ),],
                     const SizedBox(height: 16),
+
+                    /// سكرو (0)
                     CustomButton(
                       text: ' سكرو (0) ',
                       onPressed: () {

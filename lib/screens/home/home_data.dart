@@ -68,7 +68,15 @@ class HomeData {
 
     players.removeWhere((e) => e.name!.isEmpty);
 
-   /* bool res = */await Navigator.push(context,
+    int playersCount = int.parse(listCubit.state.data!
+        .where((element) => element.isActive!)
+        .toList()[0]
+        .value ??
+        "2");
+    players.removeWhere((element) => element.id! > playersCount);
+
+    /* bool res = */
+    await Navigator.push(context,
         MaterialPageRoute(builder: (_) => Dashboard(players: players)));
     players.clear();
 

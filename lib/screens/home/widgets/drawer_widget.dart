@@ -88,7 +88,7 @@ class DrawerWidget extends StatelessWidget {
                 // ),
                 const Spacer(),
                 const CustomText(
-                  text: "version 1.0.7",
+                  text: "version 1.0.8",
                   fontSize: 16,
                 ),
               ],

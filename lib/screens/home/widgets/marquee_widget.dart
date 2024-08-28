@@ -9,7 +9,7 @@ class MarqueeWidget extends StatefulWidget {
     Key? key,
     required this.child,
     this.direction = Axis.horizontal,
-    this.animationDuration = const Duration(milliseconds: 15000),
+    this.animationDuration = const Duration(milliseconds: 30000),
     this.backDuration = const Duration(milliseconds: 2000),
     this.pauseDuration = const Duration(milliseconds: 1500),
   }) : super(key: key);
@@ -37,10 +37,10 @@ class _MarqueeWidgetState extends State<MarqueeWidget> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
-      child: widget.child,
+      physics: const NeverScrollableScrollPhysics(),
       scrollDirection: widget.direction,
       controller: scrollController,
+      child: widget.child,
     );
   }
 
