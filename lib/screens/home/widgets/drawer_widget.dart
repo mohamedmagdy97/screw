@@ -4,6 +4,7 @@ import 'package:screw_calc/components/custom_text.dart';
 import 'package:screw_calc/screens/contact_us/contact_us.dart';
 import 'package:screw_calc/screens/history/history.dart';
 import 'package:screw_calc/screens/rules/rules_screen.dart';
+import 'package:screw_calc/screens/show_video/show_video.dart';
 import 'package:screw_calc/utility/app_theme.dart';
 
 class DrawerWidget extends StatelessWidget {
@@ -57,7 +58,7 @@ class DrawerWidget extends StatelessWidget {
                     textAlign: TextAlign.end,
                   ),
                 ),
-                /*  ListTile(
+                ListTile(
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const ShowVideo()),
@@ -67,7 +68,7 @@ class DrawerWidget extends StatelessWidget {
                     fontSize: 16,
                     textAlign: TextAlign.end,
                   ),
-                ),*/
+                ),
                 ListTile(
                   onTap: () => Navigator.push(
                     context,
@@ -88,7 +89,7 @@ class DrawerWidget extends StatelessWidget {
                 // ),
                 const Spacer(),
                 const CustomText(
-                  text: "version 1.0.8",
+                  text: "version 2.0.0",
                   fontSize: 16,
                 ),
               ],
