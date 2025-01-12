@@ -11,6 +11,7 @@ HomeData homeData = HomeData();
 
 class HomeData {
   GenericCubit<List<Item>> listCubit = GenericCubit<List<Item>>(data: []);
+  GenericCubit<List<Item>> listTeamsCubit = GenericCubit<List<Item>>(data: []);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController playerOne = TextEditingController();
@@ -29,7 +30,14 @@ class HomeData {
 
   List<PlayerModel> players = [];
 
-  init() async {
+  init() {
+    classicInit();
+    friendsInit();
+  }
+
+  classicInit() async {
+    listCubit.update(data: []);
+
     List.generate(
         11,
         (index) => listCubit.state.data!.add(
@@ -41,12 +49,100 @@ class HomeData {
     loadAd();
   }
 
+  friendsInit() async {
+    listTeamsCubit.update(data: []);
+    List.generate(
+        3,
+        (index) => listTeamsCubit.state.data!.add(
+            Item(key: (index + 2), value: "${index + 2}", isActive: false)));
+
+    listTeamsCubit.state.data!.first.isActive = true;
+    listTeamsCubit.update(data: listTeamsCubit.state.data!);
+
+    loadAd();
+  }
+
   onSelect(index) {
     listCubit.state.data!.map((e) => e.isActive = false).toList();
     listCubit.update(data: listCubit.state.data!);
 
     listCubit.state.data![index].isActive = true;
     listCubit.update(data: listCubit.state.data!);
+  }
+
+  onSelectTeam(index) {
+    listTeamsCubit.state.data!.map((e) => e.isActive = false).toList();
+    // listTeamsCubit.update(data: listTeamsCubit.state.data!);
+
+    listTeamsCubit.state.data![index].isActive = true;
+    listTeamsCubit.update(data: listTeamsCubit.state.data!);
+  }
+
+  goToNextTeams(context) async {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+    players.add(PlayerModel(id: 1, name: playerOne.text));
+    players.add(PlayerModel(id: 2, name: playerTwo.text));
+    players.add(PlayerModel(id: 3, name: playerThree.text ?? ""));
+    players.add(PlayerModel(id: 4, name: playerFour.text ?? ""));
+    players.add(PlayerModel(id: 5, name: playerFive.text ?? ""));
+    players.add(PlayerModel(id: 6, name: playerSix.text ?? ""));
+    players.add(PlayerModel(id: 7, name: playerOne2.text ?? ""));
+    players.add(PlayerModel(id: 8, name: playerTwo2.text ?? ""));
+    players.add(PlayerModel(id: 9, name: playerThree2.text ?? ""));
+    players.add(PlayerModel(id: 10, name: playerFour2.text ?? ""));
+    players.add(PlayerModel(id: 11, name: playerFive2.text ?? ""));
+    players.add(PlayerModel(id: 12, name: playerSix2.text ?? ""));
+
+    players.removeWhere((e) => e.name!.isEmpty);
+
+    int playersCount;
+    switch (int.parse(listTeamsCubit.state.data!
+            .where((element) => element.isActive!)
+            .toList()[0]
+            .value ??
+        "2")) {
+      case 2:
+        playersCount = 4;
+        break;
+      case 3:
+        playersCount = 6;
+        break;
+      case 4:
+        playersCount = 8;
+        break;
+      default:
+        playersCount = 4;
+        return;
+    }
+
+    players.removeWhere((element) => element.id! > playersCount);
+
+    /* bool res = */
+
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => Dashboard(
+                  players: players,
+                  teamsMode: true,
+                )));
+    players.clear();
+
+    // if (res) {
+    //   players.clear();
+    //   playerOne.clear();
+    //   playerTwo.clear();
+    //   playerThree.clear();
+    //   playerFour.clear();
+    //   playerFive.clear();
+    //   playerSix.clear();
+    //   listCubit.state.data!.clear();
+    //   listCubit.update(data: listCubit.state.data!);
+    //
+    //   init();
+    // }
   }
 
   goToNext(context) async {
@@ -69,9 +165,9 @@ class HomeData {
     players.removeWhere((e) => e.name!.isEmpty);
 
     int playersCount = int.parse(listCubit.state.data!
-        .where((element) => element.isActive!)
-        .toList()[0]
-        .value ??
+            .where((element) => element.isActive!)
+            .toList()[0]
+            .value ??
         "2");
     players.removeWhere((element) => element.id! > playersCount);
 
@@ -107,17 +203,6 @@ class HomeData {
   }
 
   DateTime? currentBackPressTime;
-
-  Future<bool> onWillPop(context) {
-    DateTime now = DateTime.now();
-    if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
-      currentBackPressTime = now;
-      Utilities().customSnackBarTerms(context, txt: "للخروج اضغط مرتين ");
-      return Future.value(false);
-    }
-    return Future.value(true);
-  }
 
   BannerAd? bannerAd;
   GenericCubit<bool> isLoadedCubit = GenericCubit(data: false);

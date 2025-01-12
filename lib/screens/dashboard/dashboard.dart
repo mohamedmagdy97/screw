@@ -4,22 +4,26 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/components/custom_button.dart';
 import 'package:screw_calc/components/custom_text.dart';
-import 'package:screw_calc/components/text_filed_custom.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
 import 'package:screw_calc/helpers/ad_manager.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/screens/dashboard/dashboard_data.dart';
+import 'package:screw_calc/screens/dashboard/widgets/add_value_dialog.dart';
+import 'package:screw_calc/screens/dashboard/widgets/marquee_bar.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
-import 'package:screw_calc/screens/home/widgets/marquee_widget.dart';
 import 'package:screw_calc/utility/app_theme.dart';
-import 'package:screw_calc/utility/validation_form.dart';
 
 class Dashboard extends StatefulWidget {
   final List<PlayerModel> players;
+  final bool? teamsMode;
   final bool? fromHistory;
 
-  const Dashboard({Key? key, required this.players, this.fromHistory = false})
-      : super(key: key);
+  const Dashboard({
+    super.key,
+    required this.players,
+    this.fromHistory = false,
+    this.teamsMode = false,
+  });
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -104,124 +108,20 @@ class _DashboardState extends State<Dashboard> {
       },
       // homeData.onWillPop(context),
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          backgroundColor: AppColors.grayy,
-          leading: !widget.fromHistory!
-              ? IconButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) => Dialog(
-                              backgroundColor: AppColors.bg,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 32),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    CustomText(
-                                      text: "تحذير",
-                                      fontSize: 18.sp,
-                                      color: AppColors.mainColor,
-                                    ),
-                                    const SizedBox(height: 40),
-                                    CustomText(
-                                      text: "هل تريد اعادة بدأ الجولة",
-                                      fontSize: 18.sp,
-                                    ),
-                                    const SizedBox(height: 40),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const CustomText(
-                                              text: "لا", fontSize: 18),
-                                        ),
-                                        CustomButton(
-                                          width: 0.25.sw,
-                                          height: 40,
-                                          text: "نعم",
-                                          isButtonBorder: true,
-                                          onPressed: () {
-                                            homeData.clearValues();
-                                            setState(() {});
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ));
-                  },
-                  icon: const Icon(Icons.refresh, color: AppColors.white),
-                )
-              : const SizedBox(),
-          actions: [
-            IconButton(
-              onPressed: () => Navigator.pop(context, true),
-              icon: Transform.flip(
-                flipX: true,
-                child: const Icon(Icons.arrow_back_ios, color: AppColors.white),
-              ),
-            ),
-          ],
-          title: CustomText(text: "النتائج", fontSize: 22.sp),
+        appBar: DashBoardAppBar(
+          fromHistory: widget.fromHistory ?? false,
+          onPressed: () {
+            homeData.clearValues();
+            setState(() {});
+            Navigator.pop(context);
+          },
         ),
-        /*bottomNavigationBar: homeData.bannerAd != null
-            ? Container(
-                color: AppColors.grayy,
-                width: homeData.bannerAd!.size.width.toDouble(),
-                height: homeData.bannerAd!.size.height.toDouble(),
-                child: AdWidget(ad: homeData.bannerAd!),
-              )
-            : null,*/
         backgroundColor: AppColors.bg,
         body: Directionality(
           textDirection: TextDirection.rtl,
           child: Column(
             children: [
-              BlocBuilder<GenericCubit<bool>, GenericState<bool>>(
-                bloc: dashboardData.hideMarquee,
-                builder: (context, state) {
-                  if (state.data == false) {
-                    return Container(
-                      width: 1.sw,
-                      padding: const EdgeInsets.all(8),
-                      color: AppColors.black,
-                      child: Row(
-                        children: [
-                          const Expanded(
-                            child: MarqueeWidget(
-                              direction: Axis.horizontal,
-                              child: CustomText(
-                                text:
-                                    "            صلي على النبي, لا اله الا الله وحده لا شريك له, له الملك وله الحمد يحي ويميت وهو على كل شيء قدير, سبحان الله والحمد لله ولا اله الا الله ولا حول ولا قوة الا بالله, استغفر الله العظيم وأتوب اليه, لا اله الا انت سبحانك اني كنت من الظالمين .            ",
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                              onPressed: () =>
-                                  dashboardData.hideMarquee.update(data: true),
-                              icon: const Icon(
-                                Icons.close,
-                                color: AppColors.white,
-                              ))
-                        ],
-                      ),
-                    );
-                  } else {
-                    return const SizedBox();
-                  }
-                },
-              ),
+              MarqueeBar(dashboardData: dashboardData),
               const SizedBox(height: 8),
               CustomText(
                 text: gw == 10 ? "انتهت الجولات" : "الجولة رقم $gw",
@@ -328,11 +228,13 @@ class _DashboardState extends State<Dashboard> {
                                               widget.players[index].gw5!
                                                   .isNotEmpty,
                                           child: IconButton(
-                                            onPressed: () {
+                                            onPressed: () async {
                                               // dashboardData.checkAllGwPlayed(gw,widget.players,index);
-                                              addValue(context,
+                                              await addValue(context,
                                                   player:
                                                       widget.players[index]);
+
+                                              setState(() {});
                                             },
                                             icon: const Icon(
                                                 Icons.add_circle_sharp,
@@ -402,285 +304,94 @@ class _DashboardState extends State<Dashboard> {
 
   addValue(context, {required PlayerModel player}) {
     showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              title: Directionality(
-                textDirection: TextDirection.rtl,
-                child: CustomText(
-                  text: 'نتيجة الاعب ${player.name} في الجولة ',
-                  fontSize: 14.sp,
-                  textAlign: TextAlign.center,
-                  color: AppColors.black,
-                ),
-              ),
-              content: Form(
-                key: dashboardData.formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomTextField(
-                      controller: dashboardData.controller,
-                      hintText: '',
-                      labelText: '',
-                      containtPaddingRight: 0,
-                      inputType: TextInputType.number,
-                      fillColor: Colors.white,
-                      textColor: Colors.black,
-                      fillBorderColor: AppColors.grayy,
-                      textFieldVaidType: TextFieldValidatorType.Number,
-                    ),
-                    const SizedBox(height: 16),
-                    CustomButton(
-                      text: 'التالي',
-                      onPressed: () {
-                        if (!dashboardData.formKey.currentState!.validate()) {
-                          return;
-                        }
-                        Navigator.pop(context);
-                        if (player.gw1!.isEmpty) {
-                          player.gw1 = dashboardData.controller.text;
+      context: context,
+      builder: (_) => AddValueDialog(
+          dashboardData: dashboardData,
+          player: player,
+          fun: () => setState(() {})),
+    );
+  }
+}
 
-                          player.total =
-                              (int.parse(player.gw1.toString())).toString();
-                        } else if (player.gw2!.isEmpty &&
-                            player.gw1!.isNotEmpty) {
-                          player.gw2 = dashboardData.controller.text;
+class DashBoardAppBar extends PreferredSize {
+  final bool fromHistory;
+  final Function? onPressed;
 
-                          player.total = (int.parse(player.gw1.toString()) +
-                                  int.parse(player.gw2.toString()))
-                              .toString();
-                        } else if (player.gw3!.isEmpty &&
-                            player.gw2!.isNotEmpty &&
-                            player.gw1!.isNotEmpty) {
-                          player.gw3 = dashboardData.controller.text;
+  const DashBoardAppBar({
+    super.key,
+    required this.fromHistory,
+    this.onPressed,
+  }) : super(
+          child: const SizedBox(),
+          preferredSize: const Size.fromHeight(80),
+        );
 
-                          player.total = (int.parse(player.gw1.toString()) +
-                                  int.parse(player.gw2.toString()) +
-                                  int.parse(player.gw3.toString()))
-                              .toString();
-                        } else if (player.gw4!.isEmpty &&
-                            player.gw3!.isNotEmpty &&
-                            player.gw2!.isNotEmpty &&
-                            player.gw1!.isNotEmpty) {
-                          player.gw4 = dashboardData.controller.text;
-
-                          player.total = (int.parse(player.gw1.toString()) +
-                                  int.parse(player.gw2.toString()) +
-                                  int.parse(player.gw3.toString()) +
-                                  int.parse(player.gw4.toString()))
-                              .toString();
-                        } else if (player.gw5!.isEmpty &&
-                            player.gw4!.isNotEmpty &&
-                            player.gw3!.isNotEmpty &&
-                            player.gw2!.isNotEmpty &&
-                            player.gw1!.isNotEmpty) {
-                          player.gw5 = dashboardData.controller.text;
-
-                          player.total = (int.parse(player.gw1.toString()) +
-                                  int.parse(player.gw2.toString()) +
-                                  int.parse(player.gw3.toString()) +
-                                  int.parse(player.gw4.toString()) +
-                                  int.parse(player.gw5.toString()))
-                              .toString();
-                        }
-
-                        dashboardData.controller.clear();
-                        setState(() {});
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    // if (player.gw5!.isEmpty &&
-                    //     player.gw4!.isNotEmpty &&
-                    //     player.gw3!.isNotEmpty &&
-                    //     player.gw2!.isNotEmpty &&
-                    //     player.gw1!.isNotEmpty)
-                    /// 2 x آحسب النتيجه
-                      CustomButton(
-                        text: ' 2 x احسب النتيجة ',
-                        onPressed: () {
-                          if (!dashboardData.formKey.currentState!.validate()) {
-                            return;
-                          }
-                          Navigator.pop(context);
-                          if (player.gw1!.isEmpty) {
-                            player.gw1 = (int.parse(dashboardData
-                                        .controller.text
-                                        .toString()) *
-                                    2)
-                                .toString();
-
-                            player.total =
-                                (int.parse(player.gw1.toString())).toString();
-                          } else if (player.gw2!.isEmpty &&
-                              player.gw1!.isNotEmpty) {
-                            player.gw2 = (int.parse(dashboardData
-                                        .controller.text
-                                        .toString()) *
-                                    2)
-                                .toString();
-
-                            player.total = (int.parse(player.gw1.toString()) +
-                                    int.parse(player.gw2.toString()))
-                                .toString();
-                          } else if (player.gw3!.isEmpty &&
-                              player.gw2!.isNotEmpty &&
-                              player.gw1!.isNotEmpty) {
-                            player.gw3 = (int.parse(dashboardData
-                                        .controller.text
-                                        .toString()) *
-                                    2)
-                                .toString();
-
-                            player.total = (int.parse(player.gw1.toString()) +
-                                    int.parse(player.gw2.toString()) +
-                                    int.parse(player.gw3.toString()))
-                                .toString();
-                          } else if (player.gw4!.isEmpty &&
-                              player.gw3!.isNotEmpty &&
-                              player.gw2!.isNotEmpty &&
-                              player.gw1!.isNotEmpty) {
-                            player.gw4 = (int.parse(dashboardData
-                                        .controller.text
-                                        .toString()) *
-                                    2)
-                                .toString();
-
-                            player.total = (int.parse(player.gw1.toString()) +
-                                    int.parse(player.gw2.toString()) +
-                                    int.parse(player.gw3.toString()) +
-                                    int.parse(player.gw4.toString()))
-                                .toString();
-                          } else if (player.gw5!.isEmpty &&
-                              player.gw4!.isNotEmpty &&
-                              player.gw3!.isNotEmpty &&
-                              player.gw2!.isNotEmpty &&
-                              player.gw1!.isNotEmpty) {
-                            player.gw5 = (int.parse(dashboardData
-                                        .controller.text
-                                        .toString()) *
-                                    2)
-                                .toString();
-
-                            player.total = (int.parse(player.gw1.toString()) +
-                                    int.parse(player.gw2.toString()) +
-                                    int.parse(player.gw3.toString()) +
-                                    int.parse(player.gw4.toString()) +
-                                    (int.parse(player.gw5.toString())))
-                                .toString();
-                          }
-
-                          dashboardData.controller.clear();
-                          setState(() {});
-                        },
-                      ),
-                    /// 4 x آحسب النتيجه
-                    if (player.gw5!.isEmpty &&
-                        player.gw4!.isNotEmpty &&
-                        player.gw3!.isNotEmpty &&
-                        player.gw2!.isNotEmpty &&
-                        player.gw1!.isNotEmpty)
-                   ...[
-                     const SizedBox(height: 16),
-                     CustomButton(
-                      text: ' 4 x احسب النتيجة ',
-                      onPressed: () {
-                        if (!dashboardData.formKey.currentState!.validate()) {
-                          return;
-                        }
-                        Navigator.pop(context);
-                              if (player.gw5!.isEmpty &&
-                            player.gw4!.isNotEmpty &&
-                            player.gw3!.isNotEmpty &&
-                            player.gw2!.isNotEmpty &&
-                            player.gw1!.isNotEmpty) {
-                          player.gw5 = (int.parse(dashboardData
-                              .controller.text
-                              .toString()) *
-                              4)
-                              .toString();
-                          player.total = (int.parse(player.gw1.toString()) +
-                              int.parse(player.gw2.toString()) +
-                              int.parse(player.gw3.toString()) +
-                              int.parse(player.gw4.toString()) +
-                              (int.parse(player.gw5.toString())))
-                              .toString();
-                        }
-
-                        dashboardData.controller.clear();
-                        setState(() {});
-                      },
-                    ),],
-                    const SizedBox(height: 16),
-
-                    /// سكرو (0)
-                    CustomButton(
-                      text: ' سكرو (0) ',
-                      onPressed: () {
-                        dashboardData.controller.text = "0";
-                        // if (!formKey.currentState!.validate()) {
-                        //   return;
-                        // }
-                        Navigator.pop(context);
-                        if (player.gw1!.isEmpty) {
-                          player.gw1 = "0";
-
-                          player.total =
-                              (int.parse(player.gw1.toString())).toString();
-                        } else if (player.gw2!.isEmpty &&
-                            player.gw1!.isNotEmpty) {
-                          player.gw2 = "0";
-
-                          player.total = (int.parse(player.gw1.toString()) +
-                                  int.parse(player.gw2.toString()))
-                              .toString();
-                        } else if (player.gw3!.isEmpty &&
-                            player.gw2!.isNotEmpty &&
-                            player.gw1!.isNotEmpty) {
-                          player.gw3 = "0";
-
-                          player.total = (int.parse(player.gw1.toString()) +
-                                  int.parse(player.gw2.toString()) +
-                                  int.parse(player.gw3.toString()))
-                              .toString();
-                        } else if (player.gw4!.isEmpty &&
-                            player.gw3!.isNotEmpty &&
-                            player.gw2!.isNotEmpty &&
-                            player.gw1!.isNotEmpty) {
-                          player.gw4 = "0";
-
-                          player.total = (int.parse(player.gw1.toString()) +
-                                  int.parse(player.gw2.toString()) +
-                                  int.parse(player.gw3.toString()) +
-                                  int.parse(player.gw4.toString()))
-                              .toString();
-                        } else if (player.gw5!.isEmpty &&
-                            player.gw4!.isNotEmpty &&
-                            player.gw3!.isNotEmpty &&
-                            player.gw2!.isNotEmpty &&
-                            player.gw1!.isNotEmpty) {
-                          player.gw5 = "0";
-                          player.total = (int.parse(player.gw1.toString()) +
-                                  int.parse(player.gw2.toString()) +
-                                  int.parse(player.gw3.toString()) +
-                                  int.parse(player.gw4.toString()) +
-                                  (int.parse(player.gw5.toString())))
-                              .toString();
-                        }
-
-                        dashboardData.controller.clear();
-                        setState(() {});
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomText(
-                      text: "انتبه لا يمكن التعديل على النتيجة",
-                      fontSize: 14.sp,
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    )
-                  ],
-                ),
-              ),
-            ));
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      centerTitle: true,
+      automaticallyImplyLeading: false,
+      backgroundColor: AppColors.grayy,
+      leading: !fromHistory
+          ? IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) => Dialog(
+                          backgroundColor: AppColors.bg,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0, vertical: 32),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CustomText(
+                                  text: "تحذير",
+                                  fontSize: 18.sp,
+                                  color: AppColors.mainColor,
+                                ),
+                                const SizedBox(height: 40),
+                                CustomText(
+                                  text: "هل تريد اعادة بدأ الجولة",
+                                  fontSize: 18.sp,
+                                ),
+                                const SizedBox(height: 40),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const CustomText(
+                                          text: "لا", fontSize: 18),
+                                    ),
+                                    CustomButton(
+                                      width: 0.25.sw,
+                                      height: 40,
+                                      text: "نعم",
+                                      isButtonBorder: true,
+                                      onPressed: onPressed,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ));
+              },
+              icon: const Icon(Icons.refresh, color: AppColors.white),
+            )
+          : const SizedBox(),
+      actions: [
+        IconButton(
+          onPressed: () => Navigator.pop(context, true),
+          icon: Transform.flip(
+            flipX: true,
+            child: const Icon(Icons.arrow_back_ios, color: AppColors.white),
+          ),
+        ),
+      ],
+      title: CustomText(text: "النتائج", fontSize: 22.sp),
+    );
   }
 }
