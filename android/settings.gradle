@@ -10,8 +10,15 @@ pluginManagement {
 
     includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")
 
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
     plugins {
+//        id "org.jetbrains.kotlin.android" version "1.9.10" // Replace with the latest version
         id "dev.flutter.flutter-gradle-plugin" version "1.0.0" apply false
+
     }
 }
 
