@@ -32,6 +32,25 @@ class _ShowVideoState extends State<ShowVideo> {
     _controller.dispose();
   }
 
+  void _skipForward() {
+    final currentPosition = _controller.value.position;
+    final duration = _controller.value.duration;
+    if (currentPosition + const Duration(seconds: 10) < duration) {
+      _controller.seekTo(currentPosition + const Duration(seconds: 10));
+    } else {
+      _controller.seekTo(duration);
+    }
+  }
+
+  void _skipBackward() {
+    final currentPosition = _controller.value.position;
+    if (currentPosition - const Duration(seconds: 10) > Duration.zero) {
+      _controller.seekTo(currentPosition - const Duration(seconds: 10));
+    } else {
+      _controller.seekTo(Duration.zero);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +82,48 @@ class _ShowVideoState extends State<ShowVideo> {
                     child: VideoPlayer(_controller),
                   ),
                   const SizedBox(height: 20),
+
+                  const SizedBox(height: 20),
+                  // Video Controls (Skip Backward, Play/Pause, Skip Forward)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: _skipBackward,
+                        icon: const Icon(
+                          Icons.replay_10,
+                          color: AppColors.white,
+                        ),
+                        iconSize: 36,
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            if (_controller.value.isPlaying) {
+                              _controller.pause();
+                            } else {
+                              _controller.play();
+                            }
+                          });
+                        },
+                        icon: Icon(
+                          _controller.value.isPlaying
+                              ? Icons.pause
+                              : Icons.play_arrow,
+                          color: AppColors.mainColorLight,
+                        ),
+                        iconSize: 36,
+                      ),
+                      IconButton(
+                        onPressed: _skipForward,
+                        icon: const Icon(
+                          Icons.forward_10,
+                          color: AppColors.white,
+                        ),
+                        iconSize: 36,
+                      ),
+                    ],
+                  ),
                   // Volume Control
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
