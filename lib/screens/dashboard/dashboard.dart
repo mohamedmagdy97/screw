@@ -8,7 +8,7 @@ import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
 import 'package:screw_calc/helpers/ad_manager.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/screens/dashboard/dashboard_data.dart';
-import 'package:screw_calc/screens/dashboard/team_model_new.dart';
+import 'package:screw_calc/models/team_model_new.dart';
 import 'package:screw_calc/screens/dashboard/widgets/add_value_dialog.dart';
 import 'package:screw_calc/screens/dashboard/widgets/dashboard_appbar.dart';
 import 'package:screw_calc/screens/dashboard/widgets/marquee_bar.dart';
