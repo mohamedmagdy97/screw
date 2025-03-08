@@ -9,8 +9,10 @@ import 'package:screw_calc/helpers/ad_manager.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/screens/dashboard/dashboard_data.dart';
 import 'package:screw_calc/screens/dashboard/widgets/add_value_dialog.dart';
+import 'package:screw_calc/screens/dashboard/widgets/dashboard_appbar.dart';
 import 'package:screw_calc/screens/dashboard/widgets/marquee_bar.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
+import 'package:screw_calc/utility/Enums.dart';
 import 'package:screw_calc/utility/app_theme.dart';
 
 class Dashboard extends StatefulWidget {
@@ -101,6 +103,7 @@ class _DashboardState extends State<Dashboard> {
       gw = 10;
     }
 
+
     return WillPopScope(
       onWillPop: () {
         Navigator.pop(context, true);
@@ -119,184 +122,396 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: AppColors.bg,
         body: Directionality(
           textDirection: TextDirection.rtl,
-          child: Column(
-            children: [
-              MarqueeBar(dashboardData: dashboardData),
-              const SizedBox(height: 8),
-              CustomText(
-                text: gw == 10 ? "انتهت الجولات" : "الجولة رقم $gw",
-                color: AppColors.mainColorLight,
-                fontSize: 18,
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  // shrinkWrap: true,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-                  child: Column(
-                    children: [
-                      ...List.generate(
-                        widget.players.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 8),
-                            decoration: BoxDecoration(
-                                color: resWinner.toString() ==
-                                        widget.players[index].total
-                                    ? AppColors.mainColor
-                                    : null,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: AppColors.grayy)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustomText(
-                                        text: widget.players[index].name
-                                            .toString(),
-                                        fontSize: 20.sp),
-                                    const SizedBox(
-                                        width: 20,
-                                        child: Divider(color: AppColors.white)),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Offstage(
-                                            offstage:
-                                                widget.players[index].gw1 ==
-                                                        null ||
-                                                    widget.players[index].gw1!
-                                                        .isEmpty,
-                                            child: CustomText(
-                                                text:
-                                                    " ${widget.players[index].gw1}",
-                                                fontSize: 20.sp)),
-                                        Offstage(
-                                            offstage:
-                                                widget.players[index].gw2 ==
-                                                        null ||
-                                                    widget.players[index].gw2!
-                                                        .isEmpty,
-                                            child: CustomText(
-                                                text:
-                                                    " + ${widget.players[index].gw2}",
-                                                fontSize: 20.sp)),
-                                        Offstage(
-                                            offstage:
-                                                widget.players[index].gw3 ==
-                                                        null ||
-                                                    widget.players[index].gw3!
-                                                        .isEmpty,
-                                            child: CustomText(
-                                                text:
-                                                    " + ${widget.players[index].gw3}",
-                                                fontSize: 20.sp)),
-                                        Offstage(
-                                            offstage:
-                                                widget.players[index].gw4 ==
-                                                        null ||
-                                                    widget.players[index].gw4!
-                                                        .isEmpty,
-                                            child: CustomText(
-                                                text:
-                                                    " + ${widget.players[index].gw4}",
-                                                fontSize: 20.sp)),
-                                        Offstage(
-                                            offstage:
-                                                widget.players[index].gw5 ==
-                                                        null ||
-                                                    widget.players[index].gw5!
-                                                        .isEmpty,
-                                            child: CustomText(
-                                                text:
-                                                    " + ${widget.players[index].gw5}",
-                                                fontSize: 20.sp)),
-                                        Offstage(
-                                          offstage: widget.players[index].gw5 !=
-                                                  null &&
-                                              widget.players[index].gw5!
-                                                  .isNotEmpty,
-                                          child: IconButton(
-                                            onPressed: () async {
-                                              // dashboardData.checkAllGwPlayed(gw,widget.players,index);
-                                              await addValue(context,
-                                                  player:
-                                                      widget.players[index]);
+          child: ModeClass.mode == GameMode.classic
+              ?
 
-                                              setState(() {});
-                                            },
-                                            icon: const Icon(
-                                                Icons.add_circle_sharp,
-                                                color: AppColors.white,
-                                                size: 30),
+              /// classic mode
+              Column(
+                  children: [
+                    MarqueeBar(dashboardData: dashboardData),
+                    const SizedBox(height: 8),
+                    CustomText(
+                      text: gw == 10 ? "انتهت الجولات" : "الجولة رقم $gw",
+                      color: AppColors.mainColorLight,
+                      fontSize: 18,
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        // shrinkWrap: true,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 1),
+                        child: Column(
+                          children: [
+                            ...List.generate(
+                              widget.players.length,
+                              (index) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0, vertical: 8),
+                                  decoration: BoxDecoration(
+                                      color: resWinner.toString() ==
+                                              widget.players[index].total
+                                          ? AppColors.mainColor
+                                          : null,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border:
+                                          Border.all(color: AppColors.grayy)),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CustomText(
+                                              text: widget.players[index].name
+                                                  .toString(),
+                                              fontSize: 20.sp),
+                                          const SizedBox(
+                                              width: 20,
+                                              child: Divider(
+                                                  color: AppColors.white)),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Offstage(
+                                                  offstage: widget
+                                                              .players[index]
+                                                              .gw1 ==
+                                                          null ||
+                                                      widget.players[index].gw1!
+                                                          .isEmpty,
+                                                  child: CustomText(
+                                                      text:
+                                                          " ${widget.players[index].gw1}",
+                                                      fontSize: 20.sp)),
+                                              Offstage(
+                                                  offstage: widget
+                                                              .players[index]
+                                                              .gw2 ==
+                                                          null ||
+                                                      widget.players[index].gw2!
+                                                          .isEmpty,
+                                                  child: CustomText(
+                                                      text:
+                                                          " + ${widget.players[index].gw2}",
+                                                      fontSize: 20.sp)),
+                                              Offstage(
+                                                  offstage: widget
+                                                              .players[index]
+                                                              .gw3 ==
+                                                          null ||
+                                                      widget.players[index].gw3!
+                                                          .isEmpty,
+                                                  child: CustomText(
+                                                      text:
+                                                          " + ${widget.players[index].gw3}",
+                                                      fontSize: 20.sp)),
+                                              Offstage(
+                                                  offstage: widget
+                                                              .players[index]
+                                                              .gw4 ==
+                                                          null ||
+                                                      widget.players[index].gw4!
+                                                          .isEmpty,
+                                                  child: CustomText(
+                                                      text:
+                                                          " + ${widget.players[index].gw4}",
+                                                      fontSize: 20.sp)),
+                                              Offstage(
+                                                  offstage: widget
+                                                              .players[index]
+                                                              .gw5 ==
+                                                          null ||
+                                                      widget.players[index].gw5!
+                                                          .isEmpty,
+                                                  child: CustomText(
+                                                      text:
+                                                          " + ${widget.players[index].gw5}",
+                                                      fontSize: 20.sp)),
+                                              Offstage(
+                                                offstage:
+                                                    widget.players[index].gw5 !=
+                                                            null &&
+                                                        widget.players[index]
+                                                            .gw5!.isNotEmpty,
+                                                child: IconButton(
+                                                  onPressed: () async {
+                                                    // dashboardData.checkAllGwPlayed(gw,widget.players,index);
+                                                    await addValue(context,
+                                                        player: widget
+                                                            .players[index]);
+
+                                                    setState(() {});
+                                                  },
+                                                  icon: const Icon(
+                                                      Icons.add_circle_sharp,
+                                                      color: AppColors.white,
+                                                      size: 30),
+                                                ),
+                                              ),
+                                              const Spacer(),
+                                              CustomText(
+                                                  text: "=", fontSize: 20.sp),
+                                              CustomText(
+                                                  text:
+                                                      " ${widget.players[index].total}  ",
+                                                  fontSize: 20.sp),
+                                            ],
                                           ),
-                                        ),
-                                        const Spacer(),
-                                        CustomText(text: "=", fontSize: 20.sp),
-                                        CustomText(
-                                            text:
-                                                " ${widget.players[index].total}  ",
-                                            fontSize: 20.sp),
-                                      ],
-                                    ),
-                                  ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                            if (!widget.fromHistory!) ...[
+                              const SizedBox(height: 8),
+                              CustomText(
+                                text:
+                                    " بعد انتهاء جميع الجولات يمكنك حفظها لتراها في السجلات الخاصة بك",
+                                fontSize: 14.sp,
+                              ),
+                              const SizedBox(height: 8),
+                              CustomButton(
+                                text: "حفظ",
+                                color: AppColors.textColorTitle,
+                                onPressed: () => dashboardData.saveGame(
+                                    widget.players, context),
+                              ),
+                              const SizedBox(height: 20),
+                              BlocBuilder<GenericCubit<bool>,
+                                  GenericState<bool>>(
+                                bloc: dashboardData.isLoadedCubit,
+                                builder: (context, state) {
+                                  if (state.data ?? false) {
+                                    return ConstrainedBox(
+                                      constraints: const BoxConstraints(
+                                        minWidth:
+                                            320, // minimum recommended width
+                                        minHeight:
+                                            220, // minimum recommended height
+                                        maxWidth: 400,
+                                        maxHeight: 300,
+                                      ),
+                                      child:
+                                          AdWidget(ad: dashboardData.nativeAd!),
+                                    );
+                                  } else {
+                                    return const SizedBox();
+                                  }
+                                },
+                              )
+                            ]
+                          ],
                         ),
                       ),
-                      if (!widget.fromHistory!) ...[
-                        const SizedBox(height: 8),
-                        CustomText(
-                          text:
-                              " بعد انتهاء جميع الجولات يمكنك حفظها لتراها في السجلات الخاصة بك",
-                          fontSize: 14.sp,
-                        ),
-                        const SizedBox(height: 8),
-                        CustomButton(
-                          text: "حفظ",
-                          color: AppColors.textColorTitle,
-                          onPressed: () =>
-                              dashboardData.saveGame(widget.players, context),
-                        ),
-                        const SizedBox(height: 20),
-                        BlocBuilder<GenericCubit<bool>, GenericState<bool>>(
-                          bloc: dashboardData.isLoadedCubit,
-                          builder: (context, state) {
-                            if (state.data ?? false) {
-                              return ConstrainedBox(
-                                constraints: const BoxConstraints(
-                                  minWidth: 320, // minimum recommended width
-                                  minHeight: 220, // minimum recommended height
-                                  maxWidth: 400,
-                                  maxHeight: 300,
+                    ),
+                  ],
+                )
+              :
+
+              /// friendly mode
+              Column(
+                  children: [
+                    MarqueeBar(dashboardData: dashboardData),
+                    const SizedBox(height: 8),
+                    CustomText(
+                      text: gw == 10 ? "انتهت الجولات" : "الجولة رقم $gw",
+                      color: AppColors.mainColorLight,
+                      fontSize: 18,
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        // shrinkWrap: true,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 1),
+                        child: Column(
+                          children: [
+                            ...List.generate(
+                              widget.players.length,
+                              (index) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0, vertical: 8),
+                                  decoration: BoxDecoration(
+                                      color: resWinner.toString() ==
+                                              widget.players[index].total
+                                          ? AppColors.mainColor
+                                          : null,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border:
+                                          Border.all(color: AppColors.grayy)),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CustomText(
+                                              text: widget.players[index].name
+                                                  .toString(),
+                                              fontSize: 20.sp),
+                                          const SizedBox(
+                                              width: 20,
+                                              child: Divider(
+                                                  color: AppColors.white)),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: [
+                                          Offstage(
+                                              offstage: widget
+                                                  .players[index]
+                                                  .gw1 ==
+                                                  null ||
+                                                  widget.players[index].gw1!
+                                                      .isEmpty,
+                                              child: CustomText(
+                                                  text:
+                                                  " ${widget.players[index].gw1}",
+                                                  fontSize: 20.sp)),
+                                          Offstage(
+                                              offstage: widget
+                                                  .players[index]
+                                                  .gw2 ==
+                                                  null ||
+                                                  widget.players[index].gw2!
+                                                      .isEmpty,
+                                              child: CustomText(
+                                                  text:
+                                                  " + ${widget.players[index].gw2}",
+                                                  fontSize: 20.sp)),
+                                          Offstage(
+                                              offstage: widget
+                                                  .players[index]
+                                                  .gw3 ==
+                                                  null ||
+                                                  widget.players[index].gw3!
+                                                      .isEmpty,
+                                              child: CustomText(
+                                                  text:
+                                                  " + ${widget.players[index].gw3}",
+                                                  fontSize: 20.sp)),
+                                          Offstage(
+                                              offstage: widget
+                                                  .players[index]
+                                                  .gw4 ==
+                                                  null ||
+                                                  widget.players[index].gw4!
+                                                      .isEmpty,
+                                              child: CustomText(
+                                                  text:
+                                                  " + ${widget.players[index].gw4}",
+                                                  fontSize: 20.sp)),
+                                          Offstage(
+                                              offstage: widget
+                                                  .players[index]
+                                                  .gw5 ==
+                                                  null ||
+                                                  widget.players[index].gw5!
+                                                      .isEmpty,
+                                              child: CustomText(
+                                                  text:
+                                                  " + ${widget.players[index].gw5}",
+                                                  fontSize: 20.sp)),
+                                          Offstage(
+                                            offstage:
+                                            widget.players[index].gw5 !=
+                                                null &&
+                                                widget.players[index]
+                                                    .gw5!.isNotEmpty,
+                                            child: IconButton(
+                                              onPressed: () async {
+                                                // dashboardData.checkAllGwPlayed(gw,widget.players,index);
+                                                await addValue(context,
+                                                    player: widget
+                                                        .players[index]);
+
+                                                setState(() {});
+                                              },
+                                              icon: const Icon(
+                                                  Icons.add_circle_sharp,
+                                                  color: AppColors.white,
+                                                  size: 30),
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                          CustomText(
+                                              text: "=", fontSize: 20.sp),
+                                          CustomText(
+                                              text:
+                                              " ${widget.players[index].total}  ",
+                                              fontSize: 20.sp),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                child: AdWidget(ad: dashboardData.nativeAd!),
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          },
-                        )
-                      ]
-                    ],
-                  ),
+                              ),
+                            ),
+                            if (!widget.fromHistory!) ...[
+                              const SizedBox(height: 8),
+                              CustomText(
+                                text:
+                                    " بعد انتهاء جميع الجولات يمكنك حفظها لتراها في السجلات الخاصة بك",
+                                fontSize: 14.sp,
+                              ),
+                              const SizedBox(height: 8),
+                              CustomButton(
+                                text: "حفظ",
+                                color: AppColors.textColorTitle,
+                                onPressed: () => dashboardData.saveGame(
+                                    widget.players, context),
+                              ),
+                              const SizedBox(height: 20),
+                              BlocBuilder<GenericCubit<bool>,
+                                  GenericState<bool>>(
+                                bloc: dashboardData.isLoadedCubit,
+                                builder: (context, state) {
+                                  if (state.data ?? false) {
+                                    return ConstrainedBox(
+                                      constraints: const BoxConstraints(
+                                        minWidth:
+                                            320, // minimum recommended width
+                                        minHeight:
+                                            220, // minimum recommended height
+                                        maxWidth: 400,
+                                        maxHeight: 300,
+                                      ),
+                                      child:
+                                          AdWidget(ad: dashboardData.nativeAd!),
+                                    );
+                                  } else {
+                                    return const SizedBox();
+                                  }
+                                },
+                              )
+                            ]
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -313,85 +528,192 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 
-class DashBoardAppBar extends PreferredSize {
-  final bool fromHistory;
-  final Function? onPressed;
-
-  const DashBoardAppBar({
-    super.key,
-    required this.fromHistory,
-    this.onPressed,
-  }) : super(
-          child: const SizedBox(),
-          preferredSize: const Size.fromHeight(80),
-        );
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      backgroundColor: AppColors.grayy,
-      leading: !fromHistory
-          ? IconButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (_) => Dialog(
-                          backgroundColor: AppColors.bg,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 32),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CustomText(
-                                  text: "تحذير",
-                                  fontSize: 18.sp,
-                                  color: AppColors.mainColor,
-                                ),
-                                const SizedBox(height: 40),
-                                CustomText(
-                                  text: "هل تريد اعادة بدأ الجولة",
-                                  fontSize: 18.sp,
-                                ),
-                                const SizedBox(height: 40),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const CustomText(
-                                          text: "لا", fontSize: 18),
-                                    ),
-                                    CustomButton(
-                                      width: 0.25.sw,
-                                      height: 40,
-                                      text: "نعم",
-                                      isButtonBorder: true,
-                                      onPressed: onPressed,
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ));
-              },
-              icon: const Icon(Icons.refresh, color: AppColors.white),
-            )
-          : const SizedBox(),
-      actions: [
-        IconButton(
-          onPressed: () => Navigator.pop(context, true),
-          icon: Transform.flip(
-            flipX: true,
-            child: const Icon(Icons.arrow_back_ios, color: AppColors.white),
-          ),
-        ),
-      ],
-      title: CustomText(text: "النتائج", fontSize: 22.sp),
-    );
-  }
-}
+// class ClassicDashboard extends StatelessWidget {
+//   final DashboardData dashboardData;
+//   final   widget;
+//   final int resWinner;
+//   final int gw;
+//   const ClassicDashboard({super.key, required this.dashboardData, required this.gw, required this.widget, required this.resWinner});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         MarqueeBar(dashboardData: dashboardData),
+//         const SizedBox(height: 8),
+//         CustomText(
+//           text: gw == 10 ? "انتهت الجولات" : "الجولة رقم $gw",
+//           color: AppColors.mainColorLight,
+//           fontSize: 18,
+//         ),
+//         Expanded(
+//           child: SingleChildScrollView(
+//             // shrinkWrap: true,
+//             padding:
+//             const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
+//             child: Column(
+//               children: [
+//                 ...List.generate(
+//                   widget.players.length,
+//                       (index) => Padding(
+//                     padding: const EdgeInsets.symmetric(vertical: 8.0),
+//                     child: Container(
+//                       padding: const EdgeInsets.symmetric(
+//                           horizontal: 16.0, vertical: 8),
+//                       decoration: BoxDecoration(
+//                           color: resWinner.toString() ==
+//                               widget.players[index].total
+//                               ? AppColors.mainColor
+//                               : null,
+//                           borderRadius: BorderRadius.circular(12),
+//                           border: Border.all(color: AppColors.grayy)),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               CustomText(
+//                                   text: widget.players[index].name
+//                                       .toString(),
+//                                   fontSize: 20.sp),
+//                               const SizedBox(
+//                                   width: 20,
+//                                   child: Divider(color: AppColors.white)),
+//                             ],
+//                           ),
+//                           const SizedBox(height: 8),
+//                           Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               Row(
+//                                 mainAxisAlignment:
+//                                 MainAxisAlignment.start,
+//                                 children: [
+//                                   Offstage(
+//                                       offstage:
+//                                       widget.players[index].gw1 ==
+//                                           null ||
+//                                           widget.players[index].gw1!
+//                                               .isEmpty,
+//                                       child: CustomText(
+//                                           text:
+//                                           " ${widget.players[index].gw1}",
+//                                           fontSize: 20.sp)),
+//                                   Offstage(
+//                                       offstage:
+//                                       widget.players[index].gw2 ==
+//                                           null ||
+//                                           widget.players[index].gw2!
+//                                               .isEmpty,
+//                                       child: CustomText(
+//                                           text:
+//                                           " + ${widget.players[index].gw2}",
+//                                           fontSize: 20.sp)),
+//                                   Offstage(
+//                                       offstage:
+//                                       widget.players[index].gw3 ==
+//                                           null ||
+//                                           widget.players[index].gw3!
+//                                               .isEmpty,
+//                                       child: CustomText(
+//                                           text:
+//                                           " + ${widget.players[index].gw3}",
+//                                           fontSize: 20.sp)),
+//                                   Offstage(
+//                                       offstage:
+//                                       widget.players[index].gw4 ==
+//                                           null ||
+//                                           widget.players[index].gw4!
+//                                               .isEmpty,
+//                                       child: CustomText(
+//                                           text:
+//                                           " + ${widget.players[index].gw4}",
+//                                           fontSize: 20.sp)),
+//                                   Offstage(
+//                                       offstage:
+//                                       widget.players[index].gw5 ==
+//                                           null ||
+//                                           widget.players[index].gw5!
+//                                               .isEmpty,
+//                                       child: CustomText(
+//                                           text:
+//                                           " + ${widget.players[index].gw5}",
+//                                           fontSize: 20.sp)),
+//                                   Offstage(
+//                                     offstage: widget.players[index].gw5 !=
+//                                         null &&
+//                                         widget.players[index].gw5!
+//                                             .isNotEmpty,
+//                                     child: IconButton(
+//                                       onPressed: () async {
+//                                         // dashboardData.checkAllGwPlayed(gw,widget.players,index);
+//                                         await addValue(context,
+//                                             player:
+//                                             widget.players[index]);
+//
+//                                         setState(() {});
+//                                       },
+//                                       icon: const Icon(
+//                                           Icons.add_circle_sharp,
+//                                           color: AppColors.white,
+//                                           size: 30),
+//                                     ),
+//                                   ),
+//                                   const Spacer(),
+//                                   CustomText(text: "=", fontSize: 20.sp),
+//                                   CustomText(
+//                                       text:
+//                                       " ${widget.players[index].total}  ",
+//                                       fontSize: 20.sp),
+//                                 ],
+//                               ),
+//                             ],
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 if (!widget.fromHistory!) ...[
+//                   const SizedBox(height: 8),
+//                   CustomText(
+//                     text:
+//                     " بعد انتهاء جميع الجولات يمكنك حفظها لتراها في السجلات الخاصة بك",
+//                     fontSize: 14.sp,
+//                   ),
+//                   const SizedBox(height: 8),
+//                   CustomButton(
+//                     text: "حفظ",
+//                     color: AppColors.textColorTitle,
+//                     onPressed: () =>
+//                         dashboardData.saveGame(widget.players, context),
+//                   ),
+//                   const SizedBox(height: 20),
+//                   BlocBuilder<GenericCubit<bool>, GenericState<bool>>(
+//                     bloc: dashboardData.isLoadedCubit,
+//                     builder: (context, state) {
+//                       if (state.data ?? false) {
+//                         return ConstrainedBox(
+//                           constraints: const BoxConstraints(
+//                             minWidth: 320, // minimum recommended width
+//                             minHeight: 220, // minimum recommended height
+//                             maxWidth: 400,
+//                             maxHeight: 300,
+//                           ),
+//                           child: AdWidget(ad: dashboardData.nativeAd!),
+//                         );
+//                       } else {
+//                         return const SizedBox();
+//                       }
+//                     },
+//                   )
+//                 ]
+//               ],
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

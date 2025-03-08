@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:screw_calc/screens/home/home.dart';
 import 'package:screw_calc/screens/splash_screen.dart';
 
 class MyApp extends StatelessWidget {

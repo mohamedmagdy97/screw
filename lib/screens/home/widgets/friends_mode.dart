@@ -19,7 +19,7 @@ class FriendsMode extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       children: [
         CustomText(
-          text: "أختر عدد التيمات",
+          text: "أختر عدد الفرق",
           fontSize: 16.sp,
           textAlign: TextAlign.end,
         ),
