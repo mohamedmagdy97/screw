@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdManager {
@@ -72,7 +73,7 @@ class AdManager {
       _rewardedInterstitialAd!.setImmersiveMode(true);
       _rewardedInterstitialAd!.show(
           onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-        print("${reward.amount} ${reward.type}");
+        debugPrint("${reward.amount} ${reward.type}");
       });
     }
   }
@@ -173,7 +174,7 @@ class AdManager {
     if (_rewardedAd != null) {
       _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
           onAdShowedFullScreenContent: (RewardedAd ad) {
-        print("Ad onAdShowedFullScreenContent");
+        debugPrint("Ad onAdShowedFullScreenContent");
       }, onAdDismissedFullScreenContent: (RewardedAd ad) {
         ad.dispose();
         loadRewardedAd();
@@ -185,7 +186,7 @@ class AdManager {
       _rewardedAd!.setImmersiveMode(true);
       _rewardedAd!.show(
           onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-        print("${reward.amount} ${reward.type}");
+        debugPrint("${reward.amount} ${reward.type}");
       });
     }
   }

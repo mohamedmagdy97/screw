@@ -8,11 +8,13 @@ import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
 import 'package:screw_calc/helpers/ad_manager.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/screens/dashboard/dashboard_data.dart';
+import 'package:screw_calc/screens/dashboard/team_model_new.dart';
 import 'package:screw_calc/screens/dashboard/widgets/add_value_dialog.dart';
 import 'package:screw_calc/screens/dashboard/widgets/dashboard_appbar.dart';
 import 'package:screw_calc/screens/dashboard/widgets/marquee_bar.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
 import 'package:screw_calc/utility/app_theme.dart';
+import 'package:screw_calc/utility/Enums.dart' as enums;
 
 class Dashboard extends StatefulWidget {
   final List<PlayerModel> players;
@@ -32,10 +34,37 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final DashboardData dashboardData = DashboardData();
+  late List<Team> teams;
 
   @override
   void initState() {
     dashboardData.init();
+
+    // Assuming we have 4 players for 2 teams
+    if (widget.teamsMode == true && widget.players.length >= 4) {
+      teams = [
+        Team(
+            name: "الفريق الأول",
+            playerOne: widget.players[0],
+            playerTwo: widget.players[1]),
+        Team(
+            name: "الفريق الثاني",
+            playerOne: widget.players[2],
+            playerTwo: widget.players[3]),
+        if (widget.players.length > 4)
+          Team(
+              name: "الفريق الثالث",
+              playerOne: widget.players[4],
+              playerTwo: widget.players[5]),
+        if (widget.players.length > 6)
+          Team(
+              name: "الفريق الرابع",
+              playerOne: widget.players[6],
+              playerTwo: widget.players[7]),
+      ];
+    } else {
+      teams = [];
+    }
     super.initState();
   }
 
@@ -69,6 +98,12 @@ class _DashboardState extends State<Dashboard> {
         .map((p) => int.parse(p.total!))
         .reduce((a, b) => a < b ? a : b);
 
+    Team? winningTeam;
+    if (teams.isNotEmpty) {
+      winningTeam = teams.reduce(
+          (curr, next) => curr.totalScore < next.totalScore ? curr : next);
+    }
+
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context, true);
@@ -95,19 +130,125 @@ class _DashboardState extends State<Dashboard> {
                 color: AppColors.mainColorLight,
                 fontSize: 18,
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-                  child: Column(
-                    children: widget.players
-                        .map((player) => buildPlayerCard(player, resWinner))
-                        .toList()
-                      ..addAll(
-                          widget.fromHistory! ? [] : buildGameSaveSection()),
-                  ),
-                ),
-              ),
+              enums.ModeClass.mode == enums.GameMode.classic
+                  ? Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 1),
+                        child: Column(
+                          children: widget.players
+                              .map((player) =>
+                                  buildPlayerCard(player, resWinner))
+                              .toList()
+                            ..addAll(widget.fromHistory!
+                                ? []
+                                : buildGameSaveSection()),
+                        ),
+                      ),
+                    )
+                  : Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 1),
+                        child: Column(children: [
+                          // Display Teams
+                          if (teams.isNotEmpty)
+                            ...teams.map((team) {
+                              return Container(
+                                padding: const EdgeInsets.all(8),
+                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: team == winningTeam
+                                      ? AppColors.mainColor
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: AppColors.grayy),
+                                ),
+                                child: Column(
+                                  children: [
+                                    CustomText(
+                                        text: team.name,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.bold),
+                                    Row(
+                                      children: [
+                                        CustomText(
+                                            text: "${team.playerOne.name} :: ",
+                                            fontSize: 16.sp),
+                                        Expanded(
+                                            child: buildPlayerScoresRow(
+                                                team.playerOne)),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        CustomText(
+                                            text: "${team.playerTwo.name} :: ",
+                                            fontSize: 16.sp),
+                                        Expanded(
+                                            child: buildPlayerScoresRow(
+                                                team.playerTwo)),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    CustomText(
+                                        text: "المجموع: ${team.totalScore}",
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.bold),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+
+                          Column(children: [
+                            const SizedBox(height: 16),
+                            CustomButton(
+                              text: "اعادة بدأ الجولة",
+                              color: AppColors.textColorTitle,
+                              onPressed: () =>
+                                  dashboardData.reloadGame(context, () {
+                                homeData.clearValues();
+                                setState(() {});
+                                Navigator.pop(context);
+                              }),
+                            ),
+                            /* CustomText(
+                                text:
+                                    "بعد انتهاء جميع الجولات يمكنك حفظها لتراها في السجلات الخاصة بك",
+                                fontSize: 14.sp),
+                            const SizedBox(height: 8),
+                            CustomButton(
+                                text: "حفظ",
+                                color: AppColors.textColorTitle,
+                                onPressed: () => dashboardData.saveGame(
+                                    widget.players, context)),*/
+                            const SizedBox(height: 20),
+                            BlocBuilder<GenericCubit<bool>, GenericState<bool>>(
+                              bloc: dashboardData.isLoadedCubit,
+                              builder: (context, state) => state.data ?? false
+                                  ? ConstrainedBox(
+                                      constraints: const BoxConstraints(
+                                          minWidth: 320,
+                                          minHeight: 220,
+                                          maxWidth: 400,
+                                          maxHeight: 300),
+                                      child:
+                                          AdWidget(ad: dashboardData.nativeAd!),
+                                    )
+                                  : const SizedBox(),
+                            ),
+                          ])
+                        ]
+                            /* widget.players
+                              .map((player) =>
+                                  buildPlayerCard(player, resWinner))
+                              .toList()
+                            ..addAll(widget.fromHistory!
+                                ? []
+                                : buildGameSaveSection()),*/
+                            ),
+                      ),
+                    ),
             ],
           ),
         ),

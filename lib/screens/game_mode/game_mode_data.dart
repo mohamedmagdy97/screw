@@ -1,10 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
 import 'package:screw_calc/models/item.dart';
-import 'package:screw_calc/models/player_model.dart';
-import 'package:screw_calc/screens/dashboard/dashboard.dart';
 import 'package:screw_calc/screens/home/home.dart';
 import 'package:screw_calc/utility/Enums.dart';
 import 'package:screw_calc/utility/utilities.dart';
@@ -17,8 +14,9 @@ class GameModeData {
 
   init() async {
     List<Item> list = [
-      Item(isActive: true, key: 0, value: "كلاسيك"),
-      Item(isActive: false, key: 1, value: " قريبا\nصاحب صاحبه"),
+      Item(isActive: true, key: 0, value: "كلاسيك\n (فردي)"),
+      Item(isActive: false, key: 1, value: "صاحب صاحبه\n (زوجي)"),
+
       // Item(isActive: false,key: 2,value: "بينج بونج"),
     ];
     listCubit.update(data: list);
@@ -26,9 +24,9 @@ class GameModeData {
 
   onSelect(context, index) {
     if (index == 1) {
-      // ModeClass.mode = GameMode.friendly;
-      return Utilities()
-          .customSnackBarTerms(context, txt: "قريبا سيتم الاضافه");
+      ModeClass.mode = GameMode.friendly;
+      // return Utilities()
+      //     .customSnackBarTerms(context, txt: "قريبا سيتم الاضافه");
     } else {
       ModeClass.mode = GameMode.classic;
     }
