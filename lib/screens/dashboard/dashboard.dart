@@ -9,6 +9,7 @@ import 'package:screw_calc/helpers/ad_manager.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/screens/dashboard/dashboard_data.dart';
 import 'package:screw_calc/screens/dashboard/widgets/add_value_dialog.dart';
+import 'package:screw_calc/screens/dashboard/widgets/dashboard_appbar.dart';
 import 'package:screw_calc/screens/dashboard/widgets/marquee_bar.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
 import 'package:screw_calc/utility/app_theme.dart';
@@ -30,11 +31,10 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  DashboardData dashboardData = DashboardData();
+  final DashboardData dashboardData = DashboardData();
 
   @override
   void initState() {
-    // homeData.loadAd();
     dashboardData.init();
     super.initState();
   }
@@ -42,71 +42,38 @@ class _DashboardState extends State<Dashboard> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // homeData.loadAd();
-    // AdManager().loadRewardedInterstitialAd();
     AdManager().loadInterstitialAd();
     dashboardData.loadNativeAdvanced();
   }
 
   @override
   void dispose() {
-    dashboardData.nativeAd!.dispose();
+    dashboardData.nativeAd?.dispose();
     AdManager().disposeAds();
-
     super.dispose();
+  }
+
+  int getCurrentRound() {
+    for (int i = 1; i <= 5; i++) {
+      if (widget.players.any((player) => player.getRoundScore(i).isEmpty)) {
+        return i;
+      }
+    }
+    return 10;
   }
 
   @override
   Widget build(BuildContext context) {
-    // widget.players.sort((a, b) => a.total!.compareTo(b.total!));
-
-    int resWinner = int.parse(widget.players
-        .reduce((curr, next) =>
-            int.parse(curr.total!) < int.parse(next.total!) ? (curr) : (next))
-        .total
-        .toString());
-
-    int gw = 1;
-    if (widget.players
-            .where((element) => element.gw1!.isNotEmpty)
-            .toList()
-            .length !=
-        widget.players.length) {
-      gw = 1;
-    } else if (widget.players
-            .where((element) => element.gw2!.isNotEmpty)
-            .toList()
-            .length !=
-        widget.players.length) {
-      gw = 2;
-    } else if (widget.players
-            .where((element) => element.gw3!.isNotEmpty)
-            .toList()
-            .length !=
-        widget.players.length) {
-      gw = 3;
-    } else if (widget.players
-            .where((element) => element.gw4!.isNotEmpty)
-            .toList()
-            .length !=
-        widget.players.length) {
-      gw = 4;
-    } else if (widget.players
-            .where((element) => element.gw5!.isNotEmpty)
-            .toList()
-            .length !=
-        widget.players.length) {
-      gw = 5;
-    } else {
-      gw = 10;
-    }
+    int gw = getCurrentRound();
+    int resWinner = widget.players
+        .map((p) => int.parse(p.total!))
+        .reduce((a, b) => a < b ? a : b);
 
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
         Navigator.pop(context, true);
-        return Future.value(true);
+        return true;
       },
-      // homeData.onWillPop(context),
       child: Scaffold(
         appBar: DashBoardAppBar(
           fromHistory: widget.fromHistory ?? false,
@@ -130,168 +97,14 @@ class _DashboardState extends State<Dashboard> {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  // shrinkWrap: true,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
                   child: Column(
-                    children: [
-                      ...List.generate(
-                        widget.players.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 8),
-                            decoration: BoxDecoration(
-                                color: resWinner.toString() ==
-                                        widget.players[index].total
-                                    ? AppColors.mainColor
-                                    : null,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: AppColors.grayy)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustomText(
-                                        text: widget.players[index].name
-                                            .toString(),
-                                        fontSize: 20.sp),
-                                    const SizedBox(
-                                        width: 20,
-                                        child: Divider(color: AppColors.white)),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Offstage(
-                                            offstage:
-                                                widget.players[index].gw1 ==
-                                                        null ||
-                                                    widget.players[index].gw1!
-                                                        .isEmpty,
-                                            child: CustomText(
-                                                text:
-                                                    " ${widget.players[index].gw1}",
-                                                fontSize: 20.sp)),
-                                        Offstage(
-                                            offstage:
-                                                widget.players[index].gw2 ==
-                                                        null ||
-                                                    widget.players[index].gw2!
-                                                        .isEmpty,
-                                            child: CustomText(
-                                                text:
-                                                    " + ${widget.players[index].gw2}",
-                                                fontSize: 20.sp)),
-                                        Offstage(
-                                            offstage:
-                                                widget.players[index].gw3 ==
-                                                        null ||
-                                                    widget.players[index].gw3!
-                                                        .isEmpty,
-                                            child: CustomText(
-                                                text:
-                                                    " + ${widget.players[index].gw3}",
-                                                fontSize: 20.sp)),
-                                        Offstage(
-                                            offstage:
-                                                widget.players[index].gw4 ==
-                                                        null ||
-                                                    widget.players[index].gw4!
-                                                        .isEmpty,
-                                            child: CustomText(
-                                                text:
-                                                    " + ${widget.players[index].gw4}",
-                                                fontSize: 20.sp)),
-                                        Offstage(
-                                            offstage:
-                                                widget.players[index].gw5 ==
-                                                        null ||
-                                                    widget.players[index].gw5!
-                                                        .isEmpty,
-                                            child: CustomText(
-                                                text:
-                                                    " + ${widget.players[index].gw5}",
-                                                fontSize: 20.sp)),
-                                        Offstage(
-                                          offstage: widget.players[index].gw5 !=
-                                                  null &&
-                                              widget.players[index].gw5!
-                                                  .isNotEmpty,
-                                          child: IconButton(
-                                            onPressed: () async {
-                                              // dashboardData.checkAllGwPlayed(gw,widget.players,index);
-                                              await addValue(context,
-                                                  player:
-                                                      widget.players[index]);
-
-                                              setState(() {});
-                                            },
-                                            icon: const Icon(
-                                                Icons.add_circle_sharp,
-                                                color: AppColors.white,
-                                                size: 30),
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        CustomText(text: "=", fontSize: 20.sp),
-                                        CustomText(
-                                            text:
-                                                " ${widget.players[index].total}  ",
-                                            fontSize: 20.sp),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (!widget.fromHistory!) ...[
-                        const SizedBox(height: 8),
-                        CustomText(
-                          text:
-                              " بعد انتهاء جميع الجولات يمكنك حفظها لتراها في السجلات الخاصة بك",
-                          fontSize: 14.sp,
-                        ),
-                        const SizedBox(height: 8),
-                        CustomButton(
-                          text: "حفظ",
-                          color: AppColors.textColorTitle,
-                          onPressed: () =>
-                              dashboardData.saveGame(widget.players, context),
-                        ),
-                        const SizedBox(height: 20),
-                        BlocBuilder<GenericCubit<bool>, GenericState<bool>>(
-                          bloc: dashboardData.isLoadedCubit,
-                          builder: (context, state) {
-                            if (state.data ?? false) {
-                              return ConstrainedBox(
-                                constraints: const BoxConstraints(
-                                  minWidth: 320, // minimum recommended width
-                                  minHeight: 220, // minimum recommended height
-                                  maxWidth: 400,
-                                  maxHeight: 300,
-                                ),
-                                child: AdWidget(ad: dashboardData.nativeAd!),
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          },
-                        )
-                      ]
-                    ],
+                    children: widget.players
+                        .map((player) => buildPlayerCard(player, resWinner))
+                        .toList()
+                      ..addAll(
+                          widget.fromHistory! ? [] : buildGameSaveSection()),
                   ),
                 ),
               ),
@@ -302,96 +115,95 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  addValue(context, {required PlayerModel player}) {
+  Widget buildPlayerCard(PlayerModel player, int resWinner) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        decoration: BoxDecoration(
+          color:
+              resWinner.toString() == player.total ? AppColors.mainColor : null,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.grayy),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomText(text: player.name.toString(), fontSize: 20.sp),
+            const SizedBox(width: 20, child: Divider(color: AppColors.white)),
+            const SizedBox(height: 8),
+            buildPlayerScoresRow(player),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildPlayerScoresRow(PlayerModel player) {
+    return Row(
+      children: List.generate(5, (i) {
+        String? roundScore = player.getRoundScore(i + 1);
+        return roundScore != null && roundScore.isNotEmpty
+            ? CustomText(
+                text: i == 0 ? " $roundScore" : " + $roundScore",
+                fontSize: 20.sp)
+            : const SizedBox();
+      })
+        ..addAll([
+          if (player.gw5!.isEmpty)
+            IconButton(
+              onPressed: player.gw5?.isNotEmpty ?? false
+                  ? null
+                  : () async {
+                      await addValue(context, player: player);
+                      setState(() {});
+                    },
+              icon: const Icon(Icons.add_circle_sharp,
+                  color: AppColors.white, size: 30),
+            ),
+          const Spacer(),
+          CustomText(text: "=", fontSize: 20.sp),
+          CustomText(text: " ${player.total} ", fontSize: 20.sp),
+        ]),
+    );
+  }
+
+  List<Widget> buildGameSaveSection() {
+    return [
+      const SizedBox(height: 8),
+      CustomText(
+          text:
+              "بعد انتهاء جميع الجولات يمكنك حفظها لتراها في السجلات الخاصة بك",
+          fontSize: 14.sp),
+      const SizedBox(height: 8),
+      CustomButton(
+          text: "حفظ",
+          color: AppColors.textColorTitle,
+          onPressed: () => dashboardData.saveGame(widget.players, context)),
+      const SizedBox(height: 20),
+      BlocBuilder<GenericCubit<bool>, GenericState<bool>>(
+        bloc: dashboardData.isLoadedCubit,
+        builder: (context, state) => state.data ?? false
+            ? ConstrainedBox(
+                constraints: const BoxConstraints(
+                    minWidth: 320,
+                    minHeight: 220,
+                    maxWidth: 400,
+                    maxHeight: 300),
+                child: AdWidget(ad: dashboardData.nativeAd!),
+              )
+            : const SizedBox(),
+      ),
+    ];
+  }
+
+  addValue(BuildContext context, {required PlayerModel player}) {
     showDialog(
       context: context,
       builder: (_) => AddValueDialog(
           dashboardData: dashboardData,
           player: player,
           fun: () => setState(() {})),
-    );
-  }
-}
-
-class DashBoardAppBar extends PreferredSize {
-  final bool fromHistory;
-  final Function? onPressed;
-
-  const DashBoardAppBar({
-    super.key,
-    required this.fromHistory,
-    this.onPressed,
-  }) : super(
-          child: const SizedBox(),
-          preferredSize: const Size.fromHeight(80),
-        );
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      backgroundColor: AppColors.grayy,
-      leading: !fromHistory
-          ? IconButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (_) => Dialog(
-                          backgroundColor: AppColors.bg,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 32),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CustomText(
-                                  text: "تحذير",
-                                  fontSize: 18.sp,
-                                  color: AppColors.mainColor,
-                                ),
-                                const SizedBox(height: 40),
-                                CustomText(
-                                  text: "هل تريد اعادة بدأ الجولة",
-                                  fontSize: 18.sp,
-                                ),
-                                const SizedBox(height: 40),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const CustomText(
-                                          text: "لا", fontSize: 18),
-                                    ),
-                                    CustomButton(
-                                      width: 0.25.sw,
-                                      height: 40,
-                                      text: "نعم",
-                                      isButtonBorder: true,
-                                      onPressed: onPressed,
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ));
-              },
-              icon: const Icon(Icons.refresh, color: AppColors.white),
-            )
-          : const SizedBox(),
-      actions: [
-        IconButton(
-          onPressed: () => Navigator.pop(context, true),
-          icon: Transform.flip(
-            flipX: true,
-            child: const Icon(Icons.arrow_back_ios, color: AppColors.white),
-          ),
-        ),
-      ],
-      title: CustomText(text: "النتائج", fontSize: 22.sp),
     );
   }
 }

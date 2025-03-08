@@ -33,7 +33,7 @@ class PlayerModel {
         gw5: json["gw5"] ?? "",
         total: json["total"] ?? "0",
         isActive: json["isActive"] ?? false,
-    isFavorite: json["isFavorite"] ?? false,
+        isFavorite: json["isFavorite"] ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,4 +48,22 @@ class PlayerModel {
         "isActive": isActive ?? false,
         "isFavorite": isFavorite ?? false,
       };
+
+  // New method to get round score dynamically
+  String getRoundScore(int round) {
+    switch (round) {
+      case 1:
+        return gw1 ?? "";
+      case 2:
+        return gw2 ?? "";
+      case 3:
+        return gw3 ?? "";
+      case 4:
+        return gw4 ?? "";
+      case 5:
+        return gw5 ?? "";
+      default:
+        return "";
+    }
+  }
 }

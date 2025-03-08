@@ -199,7 +199,7 @@ class DashboardData {
       addGameToDB();
       Utilities().customSnackBarTerms(context, txt: "تم حفظ الجولة");
       AdManager().loadRewardedInterstitialAd();
-      Navigator.pop(context);
+      // Navigator.pop(context);
       // AdManager().loadInterstitialAd();
     } else {
       Utilities().customSnackBarTerms(context,
