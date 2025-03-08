@@ -93,7 +93,25 @@ class _RulesScreenState extends State<RulesScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          CustomText(text: "الكروت الجديدة", fontSize: 16.sp),
+          CustomText(text: "الكروت الجديدة (رمضان)", fontSize: 16.sp),
+          const Divider(),
+          const TitleWithValue(
+            title: "كارت المسحراتي",
+            highlight: true,
+            value:
+                "دا اول ما يتسحب ويترمي على الار بيكون سكرو اجباري في لحظتها",
+          ),
+          const TitleWithValue(
+            title: "كارت الخشاف",
+            highlight: true,
+            value:
+                "بتسحب اربع ورقات من كومة الورق وتختار ورقة منهم وبتنزل الباقي في كومة الورق",
+          ),
+          const TitleWithValue(
+            title: "كارت المدفع",
+            highlight: true,
+            value: "بتختار واحد يكشف كل ورقة",
+          ),
           const Divider(),
           const TitleWithValue(
             title: "كارت خد بس",
@@ -105,7 +123,7 @@ class _RulesScreenState extends State<RulesScreen> {
             title: "كارت على كيفك",
             highlight: true,
             value:
-                "ليه طرقتين بيبقي علي حسب الاتفاق اما انك تدي اي امر من اللعبة زي مثلا ( خد بس او بصرة ...الخ ) او ان الامر يكون من الاوامر المفعلة من الكروت مش من اللي مرمية علي الارض",
+                "ليه طرقتين بيبقي علي حسب الاتفاق اما انك تدي اي امر من اللعبة زي مثلا ( خد بس او بصرة ...الخ ) او ان الامر يكون من الكروت اللي اتسحبت من كومة الورق قبل كده ",
           ),
           const TitleWithValue(
               title: "SEE And SWAP كارت",
