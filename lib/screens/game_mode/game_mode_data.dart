@@ -6,6 +6,7 @@ import 'package:screw_calc/models/item.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/screens/dashboard/dashboard.dart';
 import 'package:screw_calc/screens/home/home.dart';
+import 'package:screw_calc/utility/Enums.dart';
 import 'package:screw_calc/utility/utilities.dart';
 
 class GameModeData {
@@ -25,8 +26,11 @@ class GameModeData {
 
   onSelect(context, index) {
     if (index == 1) {
+      // ModeClass.mode = GameMode.friendly;
       return Utilities()
           .customSnackBarTerms(context, txt: "قريبا سيتم الاضافه");
+    } else {
+      ModeClass.mode = GameMode.classic;
     }
     listCubit.state.data!.map((e) => e.isActive = false).toList();
     listCubit.update(data: listCubit.state.data!);
@@ -35,20 +39,19 @@ class GameModeData {
     listCubit.update(data: listCubit.state.data!);
   }
 
-  goToHome(
-    context,
-  ) {
+  goToHome(context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => MyHomePage(
-          gameMode: listCubit.state.data!
+        builder: (_) => const MyHomePage(
+            // builder: (_) => const DashboardChatGPT(
+            /*gameMode: listCubit.state.data!
                   .where((e) => e.isActive == true)
                   .toList()
                   .first
                   .key ??
-              0,
-        ),
+              0,*/
+            ),
       ),
     );
   }

@@ -5,7 +5,6 @@ import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
 import 'package:screw_calc/models/item.dart';
 import 'package:screw_calc/models/player_model.dart';
 import 'package:screw_calc/screens/dashboard/dashboard.dart';
-import 'package:screw_calc/utility/utilities.dart';
 
 HomeData homeData = HomeData();
 
@@ -14,6 +13,7 @@ class HomeData {
   GenericCubit<List<Item>> listTeamsCubit = GenericCubit<List<Item>>(data: []);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController playerOne = TextEditingController();
   final TextEditingController playerTwo = TextEditingController();
   final TextEditingController playerThree = TextEditingController();
@@ -23,25 +23,45 @@ class HomeData {
 
   final TextEditingController playerOne2 = TextEditingController();
   final TextEditingController playerTwo2 = TextEditingController();
-  final TextEditingController playerThree2 = TextEditingController();
-  final TextEditingController playerFour2 = TextEditingController();
-  final TextEditingController playerFive2 = TextEditingController();
-  final TextEditingController playerSix2 = TextEditingController();
+
+  final List<TextEditingController> controllers =
+      List.generate(12, (_) => TextEditingController());
 
   List<PlayerModel> players = [];
+  DateTime? currentBackPressTime;
+  BannerAd? bannerAd;
+  GenericCubit<bool> isLoadedCubit = GenericCubit(data: false);
 
-  init() {
+  final adUnitId = Platform.isAndroid
+      ? 'ca-app-pub-2846618561973841/6485504999'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
+  void loadAd() {
+    bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) => isLoadedCubit.update(data: true),
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('BannerAd failed to load: $err');
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
+  void init() {
     classicInit();
     friendsInit();
   }
 
-  classicInit() async {
-    listCubit.update(data: []);
-
-    List.generate(
-        11,
-        (index) => listCubit.state.data!.add(
-            Item(key: (index + 2), value: "${index + 2}", isActive: false)));
+  void classicInit() {
+    listCubit.update(
+        data: List.generate(
+            11,
+            (index) =>
+                Item(key: index + 2, value: "${index + 2}", isActive: false)));
 
     listCubit.state.data!.first.isActive = true;
     listCubit.update(data: listCubit.state.data!);
@@ -49,12 +69,12 @@ class HomeData {
     loadAd();
   }
 
-  friendsInit() async {
-    listTeamsCubit.update(data: []);
-    List.generate(
-        3,
-        (index) => listTeamsCubit.state.data!.add(
-            Item(key: (index + 2), value: "${index + 2}", isActive: false)));
+  void friendsInit() {
+    listTeamsCubit.update(
+        data: List.generate(
+            3,
+            (index) =>
+                Item(key: index + 2, value: "${index + 2}", isActive: false)));
 
     listTeamsCubit.state.data!.first.isActive = true;
     listTeamsCubit.update(data: listTeamsCubit.state.data!);
@@ -62,20 +82,49 @@ class HomeData {
     loadAd();
   }
 
-  onSelect(index) {
-    listCubit.state.data!.map((e) => e.isActive = false).toList();
-    listCubit.update(data: listCubit.state.data!);
-
+  void onSelect(int index) {
+    for (var e in listCubit.state.data!) {
+      e.isActive = false;
+    }
     listCubit.state.data![index].isActive = true;
     listCubit.update(data: listCubit.state.data!);
   }
 
-  onSelectTeam(index) {
-    listTeamsCubit.state.data!.map((e) => e.isActive = false).toList();
-    // listTeamsCubit.update(data: listTeamsCubit.state.data!);
-
+  void onSelectTeam(int index) {
+    for (var e in listTeamsCubit.state.data!) {
+      e.isActive = false;
+    }
     listTeamsCubit.state.data![index].isActive = true;
     listTeamsCubit.update(data: listTeamsCubit.state.data!);
+  }
+
+  Future<void> goToNext(BuildContext context, {bool teamsMode = false}) async {
+    if (!formKey.currentState!.validate()) return;
+
+    players = controllers
+        .asMap()
+        .entries
+        .map((entry) => PlayerModel(id: entry.key + 1, name: entry.value.text))
+        .where((player) => player.name!.isNotEmpty)
+        .toList();
+
+    int playersCount = int.parse((teamsMode ? listTeamsCubit : listCubit)
+            .state
+            .data!
+            .firstWhere((element) => element.isActive!)
+            .value ??
+        "2");
+
+    players.removeWhere((element) => element.id! > playersCount);
+
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => Dashboard(players: players, teamsMode: teamsMode),
+      ),
+    );
+
+    players.clear();
   }
 
   goToNextTeams(context) async {
@@ -90,10 +139,6 @@ class HomeData {
     players.add(PlayerModel(id: 6, name: playerSix.text ?? ""));
     players.add(PlayerModel(id: 7, name: playerOne2.text ?? ""));
     players.add(PlayerModel(id: 8, name: playerTwo2.text ?? ""));
-    players.add(PlayerModel(id: 9, name: playerThree2.text ?? ""));
-    players.add(PlayerModel(id: 10, name: playerFour2.text ?? ""));
-    players.add(PlayerModel(id: 11, name: playerFive2.text ?? ""));
-    players.add(PlayerModel(id: 12, name: playerSix2.text ?? ""));
 
     players.removeWhere((e) => e.name!.isEmpty);
 
@@ -122,73 +167,19 @@ class HomeData {
     /* bool res = */
 
     await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => Dashboard(
-                  players: players,
-                  teamsMode: true,
-                )));
+      context,
+      MaterialPageRoute(
+        builder: (_) => Dashboard(players: players, teamsMode: true),
+      ),
+    );
     players.clear();
-
-    // if (res) {
-    //   players.clear();
-    //   playerOne.clear();
-    //   playerTwo.clear();
-    //   playerThree.clear();
-    //   playerFour.clear();
-    //   playerFive.clear();
-    //   playerSix.clear();
-    //   listCubit.state.data!.clear();
-    //   listCubit.update(data: listCubit.state.data!);
-    //
-    //   init();
-    // }
   }
 
-  goToNext(context) async {
-    if (!formKey.currentState!.validate()) {
-      return;
-    }
-    players.add(PlayerModel(id: 1, name: playerOne.text));
-    players.add(PlayerModel(id: 2, name: playerTwo.text));
-    players.add(PlayerModel(id: 3, name: playerThree.text ?? ""));
-    players.add(PlayerModel(id: 4, name: playerFour.text ?? ""));
-    players.add(PlayerModel(id: 5, name: playerFive.text ?? ""));
-    players.add(PlayerModel(id: 6, name: playerSix.text ?? ""));
-    players.add(PlayerModel(id: 7, name: playerOne2.text ?? ""));
-    players.add(PlayerModel(id: 8, name: playerTwo2.text ?? ""));
-    players.add(PlayerModel(id: 9, name: playerThree2.text ?? ""));
-    players.add(PlayerModel(id: 10, name: playerFour2.text ?? ""));
-    players.add(PlayerModel(id: 11, name: playerFive2.text ?? ""));
-    players.add(PlayerModel(id: 12, name: playerSix2.text ?? ""));
-
-    players.removeWhere((e) => e.name!.isEmpty);
-
-    int playersCount = int.parse(listCubit.state.data!
-            .where((element) => element.isActive!)
-            .toList()[0]
-            .value ??
-        "2");
-    players.removeWhere((element) => element.id! > playersCount);
-
-    /* bool res = */
-    await Navigator.push(context,
-        MaterialPageRoute(builder: (_) => Dashboard(players: players)));
-    players.clear();
-
-    // if (res) {
-    //   players.clear();
-    //   playerOne.clear();
-    //   playerTwo.clear();
-    //   playerThree.clear();
-    //   playerFour.clear();
-    //   playerFive.clear();
-    //   playerSix.clear();
-    //   listCubit.state.data!.clear();
-    //   listCubit.update(data: listCubit.state.data!);
-    //
-    //   init();
-    // }
+  void showSnackBar(String content, BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content: Text(content), duration: const Duration(milliseconds: 1500)),
+    );
   }
 
   clearValues() {
@@ -200,55 +191,5 @@ class HomeData {
       element.gw5 = "";
       element.total = "0";
     });
-  }
-
-  DateTime? currentBackPressTime;
-
-  BannerAd? bannerAd;
-  GenericCubit<bool> isLoadedCubit = GenericCubit(data: false);
-
-  final adUnitId = Platform.isAndroid
-      ? 'ca-app-pub-2846618561973841/6485504999'
-      : 'ca-app-pub-3940256099942544/2934735716';
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
-  void loadAd() {
-    bannerAd = BannerAd(
-      adUnitId: adUnitId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          isLoadedCubit.update(data: true);
-        },
-        // Called when an ad request failed.
-        onAdFailedToLoad: (ad, err) {
-          debugPrint('BannerAd failed to load: $err');
-          // Dispose the ad here to free resources.
-          ad.dispose();
-        },
-        onAdOpened: (Ad ad) {},
-        onAdClosed: (Ad ad) {},
-        onAdImpression: (Ad ad) {},
-      ),
-    )..load();
-  }
-
-  void showSnackBar(String content, context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(content),
-        duration: const Duration(milliseconds: 1500),
-      ),
-    );
-  }
-
-  String? getBannerAdUnitId() {
-    if (Platform.isIOS) {
-      return 'ca-app-pub-3940256099942544/2934735716';
-    } else if (Platform.isAndroid) {
-      return 'ca-app-pub-2846618561973841/6485504999';
-    }
-    return null;
   }
 }

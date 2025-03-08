@@ -32,8 +32,6 @@ class ClassicMode extends StatelessWidget {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    // spacing: 16.w,
-                    // runSpacing: 16.h,
                     children: List.generate(
                       state.data!.length,
                       (index) => Padding(
@@ -68,111 +66,13 @@ class ClassicMode extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 36),
-                CustomTextField(
-                  controller: homeData.playerOne,
-                  hintText: '',
-                  labelText: 'ادخل اسم اللاعب الاول',
-                  containtPaddingRight: 0,
-                  inputType: TextInputType.text,
-                  textFieldVaidType: TextFieldValidatorType.displayText,
-                ),
-                CustomTextField(
-                  controller: homeData.playerTwo,
-                  hintText: '',
-                  labelText: 'ادخل اسم اللاعب الثاني',
-                  containtPaddingRight: 0,
-                  inputType: TextInputType.text,
-                  textFieldVaidType: TextFieldValidatorType.displayText,
-                ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >= 3)
+                for (int i = 0;
+                    i < state.data!.firstWhere((e) => e.isActive == true).key!;
+                    i++)
                   CustomTextField(
-                    controller: homeData.playerThree,
+                    controller: homeData.controllers[i],
                     hintText: '',
-                    labelText: 'ادخل اسم اللاعب الثالث',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >= 4)
-                  CustomTextField(
-                    controller: homeData.playerFour,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب الرابع',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >= 5)
-                  CustomTextField(
-                    controller: homeData.playerFive,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب الخامس',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >= 6)
-                  CustomTextField(
-                    controller: homeData.playerSix,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب السادس',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >= 7)
-                  CustomTextField(
-                    controller: homeData.playerOne2,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب السابع',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >= 8)
-                  CustomTextField(
-                    controller: homeData.playerTwo2,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب الثامن',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >= 9)
-                  CustomTextField(
-                    controller: homeData.playerThree2,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب التاسع',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >=
-                    10)
-                  CustomTextField(
-                    controller: homeData.playerFour2,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب العاشر',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >=
-                    11)
-                  CustomTextField(
-                    controller: homeData.playerFive2,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب الحادي عشر',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >=
-                    12)
-                  CustomTextField(
-                    controller: homeData.playerSix2,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب الثاني عشر',
+                    labelText: 'ادخل اسم اللاعب ${i + 1}',
                     containtPaddingRight: 0,
                     inputType: TextInputType.text,
                     textFieldVaidType: TextFieldValidatorType.displayText,
@@ -188,7 +88,7 @@ class ClassicMode extends StatelessWidget {
               ],
             );
           },
-        )
+        ),
       ],
     );
   }

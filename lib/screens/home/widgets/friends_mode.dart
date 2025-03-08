@@ -3,12 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:screw_calc/components/custom_button.dart';
 import 'package:screw_calc/components/custom_text.dart';
-import 'package:screw_calc/components/text_filed_custom.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
 import 'package:screw_calc/models/item.dart';
 import 'package:screw_calc/screens/home/home_data.dart';
+import 'package:screw_calc/screens/home/widgets/build_team_field.dart';
 import 'package:screw_calc/utility/app_theme.dart';
-import 'package:screw_calc/utility/validation_form.dart';
 
 class FriendsMode extends StatelessWidget {
   const FriendsMode({super.key});
@@ -27,14 +26,14 @@ class FriendsMode extends StatelessWidget {
         BlocBuilder<GenericCubit<List<Item>>, GenericState<List<Item>>>(
           bloc: homeData.listTeamsCubit,
           builder: (context, state) {
+            final activeTeams =
+                state.data!.firstWhere((e) => e.isActive == true).key!;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    // spacing: 16.w,
-                    // runSpacing: 16.h,
                     children: List.generate(
                       state.data!.length,
                       (index) => Padding(
@@ -69,100 +68,24 @@ class FriendsMode extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                CustomText(
-                  text: "الفريق الاول",
-                  fontSize: 16.sp,
-                  textAlign: TextAlign.end,
+                BuildTeamFields(
+                  teamName: "الفريق الأول",
+                  controllers: [homeData.playerOne, homeData.playerTwo],
                 ),
-                const SizedBox(height: 8),
-                CustomTextField(
-                  controller: homeData.playerOne,
-                  hintText: '',
-                  labelText: 'ادخل اسم اللاعب الاول',
-                  containtPaddingRight: 0,
-                  inputType: TextInputType.text,
-                  textFieldVaidType: TextFieldValidatorType.displayText,
+                BuildTeamFields(
+                  teamName: "الفريق الثاني",
+                  controllers: [homeData.playerThree, homeData.playerFour],
                 ),
-                CustomTextField(
-                  controller: homeData.playerTwo,
-                  hintText: '',
-                  labelText: 'ادخل اسم اللاعب الثاني',
-                  containtPaddingRight: 0,
-                  inputType: TextInputType.text,
-                  textFieldVaidType: TextFieldValidatorType.displayText,
-                ),
-                CustomText(
-                  text: "الفريق الثاني",
-                  fontSize: 16.sp,
-                  textAlign: TextAlign.end,
-                ),
-                const SizedBox(height: 8),
-                CustomTextField(
-                  controller: homeData.playerThree,
-                  hintText: '',
-                  labelText: 'ادخل اسم اللاعب الاول',
-                  containtPaddingRight: 0,
-                  inputType: TextInputType.text,
-                  textFieldVaidType: TextFieldValidatorType.displayText,
-                ),
-                CustomTextField(
-                  controller: homeData.playerFour,
-                  hintText: '',
-                  labelText: 'ادخل اسم اللاعب الثاني',
-                  containtPaddingRight: 0,
-                  inputType: TextInputType.text,
-                  textFieldVaidType: TextFieldValidatorType.displayText,
-                ),
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >=
-                    3) ...[
-                  CustomText(
-                    text: "الفريق الثالث",
-                    fontSize: 16.sp,
-                    textAlign: TextAlign.end,
+                if (activeTeams >= 3)
+                  BuildTeamFields(
+                    teamName: "الفريق الثالث",
+                    controllers: [homeData.playerFive, homeData.playerSix],
                   ),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    controller: homeData.playerFive,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب الاول',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
+                if (activeTeams >= 4)
+                  BuildTeamFields(
+                    teamName: "الفريق الرابع",
+                    controllers: [homeData.playerOne2, homeData.playerTwo2],
                   ),
-                  CustomTextField(
-                    controller: homeData.playerSix,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب الثاني',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                ],
-                if (state.data!.firstWhere((e) => e.isActive == true).key! >=
-                    4) ...[
-                  CustomText(
-                    text: "الفريق الرابع",
-                    fontSize: 16.sp,
-                    textAlign: TextAlign.end,
-                  ),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    controller: homeData.playerOne2,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب الاول',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                  CustomTextField(
-                    controller: homeData.playerTwo2,
-                    hintText: '',
-                    labelText: 'ادخل اسم اللاعب الثاني',
-                    containtPaddingRight: 0,
-                    inputType: TextInputType.text,
-                    textFieldVaidType: TextFieldValidatorType.displayText,
-                  ),
-                ],
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 20.0, vertical: 16),

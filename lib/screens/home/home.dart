@@ -7,12 +7,11 @@ import 'package:screw_calc/screens/home/home_data.dart';
 import 'package:screw_calc/screens/home/widgets/classic_mode.dart';
 import 'package:screw_calc/screens/home/widgets/drawer_widget.dart';
 import 'package:screw_calc/screens/home/widgets/friends_mode.dart';
+import 'package:screw_calc/utility/Enums.dart';
 import 'package:screw_calc/utility/app_theme.dart';
 
 class MyHomePage extends StatefulWidget {
-  final int gameMode;
-
-  const MyHomePage({super.key, required this.gameMode});
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -64,16 +63,16 @@ class _MyHomePageState extends State<MyHomePage> {
       endDrawer: const DrawerWidget(),
       bottomNavigationBar: homeData.bannerAd != null
           ? Container(
-              color: AppColors.grayy,
-              width: homeData.bannerAd!.size.width.toDouble(),
-              height: homeData.bannerAd!.size.height.toDouble(),
-              child: AdWidget(ad: homeData.bannerAd!),
-            )
+        color: AppColors.grayy,
+        width: homeData.bannerAd!.size.width.toDouble(),
+        height: homeData.bannerAd!.size.height.toDouble(),
+        child: AdWidget(ad: homeData.bannerAd!),
+      )
           : null,
       backgroundColor: AppColors.bg,
       body: Form(
           key: homeData.formKey,
-          child: widget.gameMode == 0
+          child: ModeClass.mode == GameMode.classic
               ? const ClassicMode()
               : const FriendsMode()),
     );
