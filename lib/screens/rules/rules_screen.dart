@@ -99,7 +99,7 @@ class _RulesScreenState extends State<RulesScreen> {
             title: "كارت المسحراتي",
             highlight: true,
             value:
-                "دا اول ما يتسحب ويترمي على الار بيكون سكرو اجباري في لحظتها",
+                "دا اول ما يتسحب ويترمي على الارض بيكون سكرو اجباري في لحظتها",
           ),
           const TitleWithValue(
             title: "كارت الخشاف",
