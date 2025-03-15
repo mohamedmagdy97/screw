@@ -8,7 +8,7 @@ import 'package:screw_calc/my_app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
-  loadAppOpen();
+  // loadAppOpen();
 
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp],
@@ -29,6 +29,7 @@ loadAppOpen() {
       },
       onAdFailedToLoad: (adsFail) => log("Error message===========$adsFail"),
     ),
-    orientation: AppOpenAd.orientationPortrait,
+
+    // orientation: AppOpenAd.orientationPortrait,
   );
 }

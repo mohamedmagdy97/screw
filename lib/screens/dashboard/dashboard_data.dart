@@ -7,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:screw_calc/components/custom_button.dart';
 import 'package:screw_calc/components/custom_text.dart';
-import 'package:screw_calc/components/text_filed_custom.dart';
 import 'package:screw_calc/cubits/generic_cubit/generic_cubit.dart';
 import 'package:screw_calc/helpers/ad_manager.dart';
 import 'package:screw_calc/models/game_model.dart';
@@ -16,7 +15,6 @@ import 'package:screw_calc/utility/app_theme.dart';
 import 'package:screw_calc/utility/local_store.dart';
 import 'package:screw_calc/utility/local_storge_key.dart';
 import 'package:screw_calc/utility/utilities.dart';
-import 'package:screw_calc/utility/validation_form.dart';
 
 class DashboardData {
   final TextEditingController controller = TextEditingController();
@@ -29,21 +27,21 @@ class DashboardData {
   }
 
   checkAllGwPlayed(int gw, List<PlayerModel> players, int index) {
-    print('ddddddddd=gw1=${players[index].gw1!.isNotEmpty}');
-    print('ddddddddd=gw2=${players[index].gw2!.isNotEmpty}');
-    print('ddddddddd=gw3=${players[index].gw3!.isNotEmpty}');
-    print('ddddddddd=gw4=${players[index].gw4!.isNotEmpty}');
-    print('ddddddddd=gw5=${players[index].gw5!.isNotEmpty}');
-    print('ddddddddd==$gw');
-    print(
+    debugPrint('ddddddddd=gw1=${players[index].gw1!.isNotEmpty}');
+    debugPrint('ddddddddd=gw2=${players[index].gw2!.isNotEmpty}');
+    debugPrint('ddddddddd=gw3=${players[index].gw3!.isNotEmpty}');
+    debugPrint('ddddddddd=gw4=${players[index].gw4!.isNotEmpty}');
+    debugPrint('ddddddddd=gw5=${players[index].gw5!.isNotEmpty}');
+    debugPrint('ddddddddd==$gw');
+    debugPrint(
         'dd=1=${players.where((element) => element.gw1!.isEmpty).toList().length > 1}');
-    print(
+    debugPrint(
         'dd=2=${players.where((element) => element.gw2!.isEmpty).toList().length > 1}');
-    print(
+    debugPrint(
         'dd=3=${players.where((element) => element.gw3!.isEmpty).toList().length > 1}');
-    print(
+    debugPrint(
         'dd=4=${players.where((element) => element.gw4!.isEmpty).toList().length > 1}');
-    print(
+    debugPrint(
         'dd=5=${players.where((element) => element.gw5!.isEmpty).toList().length > 1}');
 
     if (gw == 1) {
@@ -51,35 +49,35 @@ class DashboardData {
           (players.where((element) => element.gw1!.isEmpty).toList().length >
                   1 !=
               false)) {
-        print('ssssss  lol 1');
+        debugPrint('ssssss  lol 1');
       }
     } else if (gw == 2) {
       if (players[index].gw2!.isNotEmpty != false &&
           (players.where((element) => element.gw2!.isEmpty).toList().length >
                   1 !=
               false)) {
-        print('ssssss  lol 2');
+        debugPrint('ssssss  lol 2');
       }
     } else if (gw == 3) {
       if (players[index].gw3!.isNotEmpty != false &&
           (players.where((element) => element.gw3!.isEmpty).toList().length >
                   1 !=
               false)) {
-        print('ssssss  lol 3');
+        debugPrint('ssssss  lol 3');
       }
     } else if (gw == 4) {
       if (players[index].gw4!.isNotEmpty != false &&
           (players.where((element) => element.gw4!.isEmpty).toList().length >
                   1 !=
               false)) {
-        print('ssssss  lol 4');
+        debugPrint('ssssss  lol 4');
       }
     } else if (gw == 5) {
       if (players[index].gw5!.isNotEmpty != false &&
           (players.where((element) => element.gw5!.isEmpty).toList().length >
                   1 !=
               false)) {
-        print('ssssss  lol 5');
+        debugPrint('ssssss  lol 5');
       }
     }
 
@@ -173,7 +171,6 @@ class DashboardData {
     }*/
   }
 
-
   List<GameModel> listGames = [];
   GenericCubit<List<GameModel>> jobsCubit = GenericCubit<List<GameModel>>();
   GenericCubit<bool> hideMarquee = GenericCubit<bool>(data: false);
@@ -190,6 +187,50 @@ class DashboardData {
     jobsCubit.update(data: listGames.toList());
   }
 
+  reloadGame(BuildContext context, Function? onPressed) {
+    return showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        backgroundColor: AppColors.bg,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomText(
+                text: "تحذير",
+                fontSize: 18.sp,
+                color: AppColors.mainColor,
+              ),
+              const SizedBox(height: 40),
+              CustomText(
+                text: "هل تريد اعادة بدأ الجولة",
+                fontSize: 18.sp,
+              ),
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const CustomText(text: "لا", fontSize: 18),
+                  ),
+                  CustomButton(
+                    width: 0.25.sw,
+                    height: 40,
+                    text: "نعم",
+                    isButtonBorder: true,
+                    onPressed: onPressed,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   saveGame(List<PlayerModel> listPlayers, context) {
     if (listPlayers.last.gw5 != null &&
         listPlayers.last.gw5!.isNotEmpty &&
@@ -199,7 +240,11 @@ class DashboardData {
       addGameToDB();
       Utilities().customSnackBarTerms(context, txt: "تم حفظ الجولة");
       AdManager().loadRewardedInterstitialAd();
-      Navigator.pop(context);
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (_) => const HistoryScreen()),
+      // );
+      // Navigator.pop(context);
       // AdManager().loadInterstitialAd();
     } else {
       Utilities().customSnackBarTerms(context,

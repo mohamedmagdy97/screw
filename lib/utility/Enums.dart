@@ -1,4 +1,5 @@
+class ModeClass {
+  static GameMode mode = GameMode.classic;
+ }
 
-
-
-enum ContractsType { individual, hourly, individualRequest }
+enum GameMode { classic, friendly }
