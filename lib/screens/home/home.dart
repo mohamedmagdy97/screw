@@ -48,7 +48,15 @@ class _MyHomePageState extends State<MyHomePage> {
       key: homeData.scaffoldKey,
       appBar: AppBar(
           centerTitle: true,
-          automaticallyImplyLeading: false,
+          leading: InkWell(
+            onTap: () => Navigator.pop(context),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child:
+                  Icon(Icons.keyboard_backspace_rounded, color: Colors.white),
+            ),
+          ),
+          automaticallyImplyLeading: true,
           backgroundColor: AppColors.grayy,
           title: CustomText(text: "سكرو", fontSize: 22.sp),
           actions: [
@@ -63,11 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
       endDrawer: const DrawerWidget(),
       bottomNavigationBar: homeData.bannerAd != null
           ? Container(
-        color: AppColors.grayy,
-        width: homeData.bannerAd!.size.width.toDouble(),
-        height: homeData.bannerAd!.size.height.toDouble(),
-        child: AdWidget(ad: homeData.bannerAd!),
-      )
+              color: AppColors.grayy,
+              width: homeData.bannerAd!.size.width.toDouble(),
+              height: homeData.bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: homeData.bannerAd!),
+            )
           : null,
       backgroundColor: AppColors.bg,
       body: Form(
